@@ -42,16 +42,29 @@ CREATE TABLE class
  subject VARCHAR(45) NOT NULL,
  tID INT,
  rID INT,
+ days VARCHAR(15),
+ start_at TIME,
+ end_at TIME,
  FOREIGN KEY (tID) REFERENCES staff (tID),
  FOREIGN KEY (rID) REFERENCES room (rID)
 );
 
-DROP TABLE IF EXISTS fee;
-CREATE TABLE fee
+DROP TABLE IF EXISTS enrolled;
+CREATE TABLE enrolled
 (sID INT,
  cID INT,
- cost INT NOT NULL,
+ fee INT NOT NULL,
  PRIMARY KEY (sID, cID),
+ FOREIGN KEY (sID) REFERENCES student (sID),
+ FOREIGN KEY (cID) REFERENCES class (cID)
+);
+
+DROP TABLE IF EXISTS attendance;
+CREATE TABLE attendance
+(sID INT,
+ cID INT,
+ day DATE,
+ PRIMARY KEY (sID, cID, day),
  FOREIGN KEY (sID) REFERENCES student (sID),
  FOREIGN KEY (cID) REFERENCES class (cID)
 );
