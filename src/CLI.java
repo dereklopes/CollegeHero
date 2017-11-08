@@ -9,7 +9,7 @@ public class CLI {
         while (!exit) {
             System.out.println("\n~~~ CollegeHero v0.1 - CS157A Fall 2017 ~~~\n");
             System.out.println("What would you like to do:");
-            System.out.println("[0] Exit\n[1] Get all book names");
+            System.out.println("[0] Exit\n[1] Get all students");
             Integer[] options = {0, 1};
             Integer decision = getOption(options);
             switch (decision) {
@@ -18,7 +18,7 @@ public class CLI {
                     exit = true;
                     break;
                 case 1:
-                    getBooks();
+                    getStudents();
                     break;
             }
         }
@@ -53,10 +53,14 @@ public class CLI {
     /**
      * Prints all books and book information in library
      */
-    private static void getBooks() {
+    private static void getStudents() {
         DatabaseConnector dbc = new DatabaseConnector();
-        ResultSet result = dbc.executeStatement("SELECT * FROM BOOK");
-        System.out.println("All books:");
+        ResultSet result = dbc.executeStatement("SELECT * FROM student");
+        if (result == null) {
+            System.out.println("There are no students registered yet.");
+            return;
+        }
+        System.out.println("All students:");
         printResultSet(result);
     }
 
