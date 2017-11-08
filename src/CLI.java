@@ -7,8 +7,12 @@ public class CLI {
         while (!exit) {
             System.out.println("\n~~~ CollegeHero v0.1 - CS157A Fall 2017 ~~~\n");
             System.out.println("What would you like to do:");
-            System.out.println("[0] Exit\n[1] Get all students");
-            Integer[] options = {0, 1};
+            System.out.println(
+                    "[0] Exit\n" +
+                    "[1] Get all student information\n" +
+                    "[2] Get all staff information"
+            );
+            Integer[] options = {0, 1, 2};
             Integer decision = getOption(options);
             switch (decision) {
                 case 0:
@@ -49,12 +53,16 @@ public class CLI {
     }
 
     /**
-     * Prints all books and book information in library
+     * Prints all registered students and their information
      */
     private static void getStudents() {
-        DatabaseConnector dbc = new DatabaseConnector();
-        ResultSet result = dbc.executeStatement("SELECT * FROM student");
-        System.out.println("All students:");
-        DatabaseConnector.printResultSet(result);
+        DatabaseConnector.printAllFromTable("student");
+    }
+
+    /**
+     * Prints all staff members and their information
+     */
+    private static void getStaff() {
+        DatabaseConnector.printAllFromTable("staff");
     }
 }

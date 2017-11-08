@@ -102,7 +102,7 @@ class DatabaseConnector {
      * Prints all attributes of a result set
      * @param result - the result set to print out
      */
-    static void printResultSet(ResultSet result) {
+    private static void printResultSet(ResultSet result) {
         try {
             if (result == null) {
                 System.out.println("Empty result.");
@@ -113,6 +113,10 @@ class DatabaseConnector {
             ArrayList<HashMap<String, String>> resultList = DatabaseConnector.createListFromResultSet(result);
             if (resultList == null) {
                 System.out.println("Error getting result data.");
+                return;
+            }
+            if (resultList.isEmpty()) {
+                System.out.println("Empty result.");
                 return;
             }
             for (HashMap<String, String> row :
@@ -127,5 +131,12 @@ class DatabaseConnector {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    static void printAllFromTable(String table) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        ResultSet result = dbc.executeStatement("SELECT * FROM " + table);
+        System.out.println("All " + table + ":");
+        DatabaseConnector.printResultSet(result);
     }
 }
