@@ -83,14 +83,14 @@ class DatabaseConnector {
             ResultSetMetaData rsmd = result.getMetaData();
             int columnCount = rsmd.getColumnCount();
             ArrayList<HashMap<String, String>> resultList = new ArrayList<>();
-            while(result.next()) {
+            do {
                 HashMap<String, String> row = new HashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
                     String columnValue = result.getString(i);
                     row.put(rsmd.getColumnName(i), columnValue);
                 }
                 resultList.add(row);
-            }
+            } while (result.next());
             return resultList;
         } catch (SQLException ex) {
             ex.printStackTrace();
