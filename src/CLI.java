@@ -22,6 +22,9 @@ public class CLI {
                 case 1:
                     getStudents();
                     break;
+                case 2:
+                    getStaff();
+                    break;
             }
         }
     }
