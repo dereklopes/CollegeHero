@@ -1,6 +1,4 @@
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class CLI {
@@ -56,32 +54,7 @@ public class CLI {
     private static void getStudents() {
         DatabaseConnector dbc = new DatabaseConnector();
         ResultSet result = dbc.executeStatement("SELECT * FROM student");
-        if (result == null) {
-            System.out.println("There are no students registered yet.");
-            return;
-        }
         System.out.println("All students:");
-        printResultSet(result);
-    }
-
-    /**
-     * Prints all attributes of a result set
-     * @param result - the result set to print out
-     */
-    private static void printResultSet(ResultSet result) {
-        try {
-            ResultSetMetaData rsmd = result.getMetaData();
-            int columnsNumber = rsmd.getColumnCount();
-            while (result.next()) {
-                for (int i = 1; i <= columnsNumber; i++) {
-                    if (i > 1) System.out.print(" | ");
-                    String columnValue = result.getString(i);
-                    System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
-                }
-                System.out.println("");
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        DatabaseConnector.printResultSet(result);
     }
 }

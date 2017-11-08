@@ -1,18 +1,16 @@
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Properties;
 import java.io.IOException;
 import java.io.FileInputStream;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Properties;
 
-public class DatabaseConnector {
+class DatabaseConnector {
 
     private Connection connection;
 
-    public DatabaseConnector() {
+    DatabaseConnector() {
         connection = getConnection();
     }
 
@@ -70,5 +68,64 @@ public class DatabaseConnector {
             System.out.println("VendorError: " + ex.getErrorCode());
         }
         return null;
+    }
+
+    /**
+     * Create a list of rows from a ResultSet object for easier manipulation.
+     * Each row becomes an element in the list. Each element is a map with
+     * the keys being the column names.
+     * @param result - the result set to create a list from
+     * @return A list of hash maps with the column names as keys.
+     *         Each element in the list represents one row.
+     */
+    private static ArrayList<HashMap<String, String>> createListFromResultSet(ResultSet result) {
+        try {
+            ResultSetMetaData rsmd = result.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+            ArrayList<HashMap<String, String>> resultList = new ArrayList<>();
+            while(result.next()) {
+                HashMap<String, String> row = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnValue = result.getString(i);
+                    row.put(rsmd.getColumnName(i), columnValue);
+                }
+                resultList.add(row);
+            }
+            return resultList;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Prints all attributes of a result set
+     * @param result - the result set to print out
+     */
+    static void printResultSet(ResultSet result) {
+        try {
+            if (result == null) {
+                System.out.println("Empty result.");
+                return;
+            }
+            ResultSetMetaData rsmd = result.getMetaData();
+            int columnsNumber = rsmd.getColumnCount();
+            ArrayList<HashMap<String, String>> resultList = DatabaseConnector.createListFromResultSet(result);
+            if (resultList == null) {
+                System.out.println("Error getting result data.");
+                return;
+            }
+            for (HashMap<String, String> row :
+                    resultList) {
+                for (int i = 1; i <= columnsNumber; i++) {
+                    if (i > 1) System.out.print(" | ");
+                    String columnValue = row.get(rsmd.getColumnName(i));
+                    System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
+                }
+                System.out.println("");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 }
