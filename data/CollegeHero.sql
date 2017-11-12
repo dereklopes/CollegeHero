@@ -1,3 +1,5 @@
+-- Tables
+
 DROP DATABASE IF EXISTS CollegeHero;
 CREATE DATABASE CollegeHero;
 USE CollegeHero;
@@ -70,6 +72,55 @@ CREATE TABLE attendance
  FOREIGN KEY (sID) REFERENCES student (sID),
  FOREIGN KEY (cID) REFERENCES class (cID)
 );
+
+-- Procedures
+
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS getStudentByID//
+CREATE PROCEDURE getStudentByID (IN ID INT)
+BEGIN
+  SELECT * FROM student
+  WHERE sID = ID;
+END//
+
+DROP PROCEDURE IF EXISTS getStaffByID//
+CREATE PROCEDURE getStaffByID (IN ID INT)
+ BEGIN
+  SELECT * FROM staff
+  WHERE tID = ID;
+ END//
+
+DROP PROCEDURE IF EXISTS getStudentIDByPhone//
+CREATE PROCEDURE getStudentIDByPhone (IN phone VARCHAR(10))
+ BEGIN
+  SELECT sID, student.name, student.phone FROM student
+  WHERE student.phone = phone;
+ END//
+
+DROP PROCEDURE IF EXISTS getStaffIDByPhone//
+CREATE PROCEDURE getStaffIDByPhone (IN phone VARCHAR(10))
+ BEGIN
+  SELECT tID, staff.name, staff.phone FROM staff
+  WHERE staff.phone = phone;
+ END//
+
+DROP PROCEDURE IF EXISTS createStudent//
+CREATE PROCEDURE createStudent (IN name VARCHAR(255), IN password VARCHAR(60), IN sex BOOLEAN, IN phone VARCHAR(10))
+BEGIN
+ INSERT INTO student VALUES (NULL, name, password, sex, phone);
+END//
+
+DROP PROCEDURE IF EXISTS createStaff//
+CREATE PROCEDURE createStaff
+(IN name VARCHAR(255), IN password VARCHAR(60), IN department INT, IN staffType INT, IN phone VARCHAR(10))
+ BEGIN
+  INSERT INTO staff VALUES (NULL, name, password, department, staffType, phone);
+ END//
+
+DELIMITER ;
+
+-- Data sources
 
 LOAD DATA LOCAL INFILE 'students.csv'
 INTO TABLE student
