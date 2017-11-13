@@ -16,6 +16,7 @@ class DatabaseConnector {
 
     /**
      * Makes and returns a connection to the MySQL database through jdbc
+     *
      * @return connection to MySQL database, or null on error
      */
     private Connection getConnection() {
@@ -48,10 +49,11 @@ class DatabaseConnector {
 
     /**
      * Execute a SQL statement on the database
+     *
      * @param SQLStmnt - SQL statement to execute
      * @return result of the execute statement, or null if empty or error
      */
-    ResultSet executeStatement(String SQLStmnt) {
+    private ResultSet executeStatement(String SQLStmnt) {
         Statement stmnt;
         try {
             stmnt = connection.createStatement();
@@ -74,9 +76,10 @@ class DatabaseConnector {
      * Create a list of rows from a ResultSet object for easier manipulation.
      * Each row becomes an element in the list. Each element is a map with
      * the keys being the column names.
+     *
      * @param result - the result set to create a list from
      * @return A list of hash maps with the column names as keys.
-     *         Each element in the list represents one row.
+     * Each element in the list represents one row.
      */
     private static ArrayList<HashMap<String, String>> createListFromResultSet(ResultSet result) {
         try {
@@ -100,6 +103,7 @@ class DatabaseConnector {
 
     /**
      * Prints all attributes of a result set
+     *
      * @param result - the result set to print out
      */
     private static void printResultSet(ResultSet result) {
@@ -130,6 +134,32 @@ class DatabaseConnector {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Create a new student user
+     *
+     * @param name     name of the student
+     * @param password password for logging in
+     * @param sex      boolean, 1 for male, 0 for female
+     * @param phone    phone number (ex. 5555555555, maximum of 15 digits
+     * @return sID of new user, or -1 on error
+     */
+    static int createStudent(String name, String password, boolean sex, String phone) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try {
+            CallableStatement stmnt = dbc.connection.prepareCall("CALL createStudent (?, ?, ?, ?, ?)");
+            stmnt.setString(1, name);
+            stmnt.setString(2, password);
+            stmnt.setBoolean(3, sex);
+            stmnt.setString(4, phone);
+            stmnt.registerOutParameter(5, Types.INTEGER);
+            stmnt.execute();
+            return stmnt.getInt(5);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 

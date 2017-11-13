@@ -8,11 +8,11 @@ DROP TABLE IF EXISTS student;
 CREATE TABLE student
 (
   sID      INT PRIMARY KEY AUTO_INCREMENT,
-  name     VARCHAR(255) NOT NULL,
-  password VARCHAR(60)  NOT NULL,
+  name     VARCHAR(255)  NOT NULL,
+  password VARCHAR(60)   NOT NULL,
   sex      BOOLEAN,
-  phone    VARCHAR(10),
-  tuition  INT             DEFAULT 0
+  phone    VARCHAR(10) UNIQUE,
+  tuition  INT DEFAULT 0 NOT NULL
 );
 
 DROP TABLE IF EXISTS room;
@@ -125,9 +125,14 @@ CREATE PROCEDURE getStaffIDByPhone(IN phone VARCHAR(10))
   END//
 
 DROP PROCEDURE IF EXISTS createStudent//
-CREATE PROCEDURE createStudent(IN name VARCHAR(255), IN password VARCHAR(60), IN sex BOOLEAN, IN phone VARCHAR(10))
+CREATE PROCEDURE createStudent(IN  name VARCHAR(255), IN password VARCHAR(60), IN sex BOOLEAN, IN phone VARCHAR(10),
+                               OUT ID   VARCHAR(255))
   BEGIN
-    INSERT INTO student VALUES (NULL, name, password, sex, phone, NULL);
+    INSERT INTO student VALUES (NULL, name, password, sex, phone, 0);
+    SELECT student.sID
+    INTO ID
+    FROM student
+    WHERE phone = student.phone;
   END//
 
 DROP PROCEDURE IF EXISTS createStaff//
