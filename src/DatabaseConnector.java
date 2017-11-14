@@ -165,6 +165,29 @@ class DatabaseConnector {
         }
     }
 
+    /**
+     * Login as a student
+     * @param sID sID of student to login as
+     * @param password password of the student
+     * @return sID of student if successful, -1 if unsuccessful
+     */
+    static int logInAsStudent(Integer sID, String password) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStudentPasswordByID (?, ?)")) {
+            stmnt.setInt(1, sID);
+            stmnt.registerOutParameter(2, Types.VARCHAR);
+            stmnt.execute();
+            if (stmnt.getString(2).equals(password)) {
+                return sID;
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     static void printAllFromTable(String table) {
         DatabaseConnector dbc = new DatabaseConnector();
         ResultSet result = dbc.executeStatement("SELECT * FROM " + table);

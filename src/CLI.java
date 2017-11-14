@@ -15,14 +15,22 @@ public class CLI {
                             "[1] Login as student\n" +
                             "[2] Login as teacher\n" +
                             "[3] Register as new student\n" +
-                            "[4] Search for ID by phone nubmer"
+                            "[4] Search for ID by phone nubmer" +
+                            "[5] Login as admin"
             );
-            Integer[] options = {0, 1, 2, 3, 4};
+            Integer[] options = {0, 1, 2, 3, 4, 5};
             Integer decision = getOption(options);
             switch (decision) {
                 case 0:
                     System.out.println("Exiting...");
                     exit = true;
+                    break;
+                case 1:
+                    ID = loginAsStudent();
+                    if (ID > 0) {
+                        loggedIn = true;
+                        loginType = "s";
+                    }
                     break;
                 case 3:
                     ID = createStudent();
@@ -118,6 +126,23 @@ public class CLI {
         }
         System.out.println("There was an error creating your account.");
         return -1;
+    }
+
+    private static int loginAsStudent() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("Enter your student ID: ");
+        Integer sID = scanner.nextInt();
+        // TODO: Change password retrieval to not show characters inputted
+        System.out.printf("Enter your password: ");
+        scanner.nextLine();
+        String password = scanner.nextLine();
+        if (sID == DatabaseConnector.logInAsStudent(sID, password)) {
+            System.out.println("Logged in as student " + sID.toString());
+            return sID;
+        } else {
+            System.out.println("Failed to log in.");
+            return -1;
+        }
     }
 
     private static void clearConsole() {
