@@ -15,7 +15,7 @@ public class CLI {
                             "[1] Login as student\n" +
                             "[2] Login as teacher\n" +
                             "[3] Register as new student\n" +
-                            "[4] Search for ID by phone nubmer" +
+                            "[4] Search for ID by phone nubmer\n" +
                             "[5] Login as admin"
             );
             Integer[] options = {0, 1, 2, 3, 4, 5};
@@ -65,6 +65,27 @@ public class CLI {
     }
 
     /**
+     * Log in as a student user. Prompts for ID and password, then verifies against the DB.
+     *
+     * @return ID of the student logged in as, or -1 on error
+     */
+    private static int loginAsStudent() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("Enter your student ID: ");
+        Integer sID = scanner.nextInt();
+        System.out.printf("Enter your password: ");
+        scanner.nextLine();
+        String password = getPassword();
+        if (sID == DatabaseConnector.logInAsStudent(sID, password)) {
+            System.out.println("Logged in as student " + sID.toString());
+            return sID;
+        } else {
+            System.out.println("Failed to log in.");
+            return -1;
+        }
+    }
+
+    /**
      * Prompts for input and gets a valid response
      *
      * @param options - integer array to validate input against
@@ -92,26 +113,16 @@ public class CLI {
     }
 
     /**
-     * Prints all registered students and their information
+     * Create a new student user
+     *
+     * @return the student ID of the newly created user, or -1 on error
      */
-    private static void getStudents() {
-        DatabaseConnector.printAllFromTable("student");
-    }
-
-    /**
-     * Prints all staff members and their information
-     */
-    private static void getStaff() {
-        DatabaseConnector.printAllFromTable("staff");
-    }
-
     private static int createStudent() {
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Enter your full name: ");
         String name = scanner.nextLine();
-        // TODO: Change password retrieval to not show characters inputted
         System.out.printf("Enter your password: ");
-        String password = scanner.nextLine();
+        String password = getPassword();
         System.out.printf("Enter your sex (1 for male, 0 for female): ");
         int sexInput = getOption(new Integer[]{0, 1});
         boolean sex = true;
@@ -128,25 +139,34 @@ public class CLI {
         return -1;
     }
 
-    private static int loginAsStudent() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.printf("Enter your student ID: ");
-        Integer sID = scanner.nextInt();
-        // TODO: Change password retrieval to not show characters inputted
-        System.out.printf("Enter your password: ");
-        scanner.nextLine();
-        String password = scanner.nextLine();
-        if (sID == DatabaseConnector.logInAsStudent(sID, password)) {
-            System.out.println("Logged in as student " + sID.toString());
-            return sID;
-        } else {
-            System.out.println("Failed to log in.");
-            return -1;
-        }
-    }
-
+    /**
+     * Clears the screen
+     */
     private static void clearConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    /**
+     * Gets a password from the console without echoing the typed characters
+     * Alternatively (when running not in console) it prompts normally
+     *
+     * @return String password entered
+     */
+    private static String getPassword() {
+        try {
+            char[] pwdChars = System.console().readPassword();
+            StringBuilder bldr = new StringBuilder("");
+            for (char character :
+                    pwdChars) {
+                bldr.append(character);
+            }
+            return bldr.toString();
+        } catch (NullPointerException e) {
+            // No console available, just get with stdin
+            // Happens when running in an IDE
+            Scanner scanner = new Scanner(System.in);
+            return scanner.nextLine();
+        }
     }
 }
