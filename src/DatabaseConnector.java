@@ -148,8 +148,7 @@ class DatabaseConnector {
      */
     static int createStudent(String name, String password, boolean sex, String phone) {
         DatabaseConnector dbc = new DatabaseConnector();
-        try {
-            CallableStatement stmnt = dbc.connection.prepareCall("CALL createStudent (?, ?, ?, ?, ?)");
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL createStudent (?, ?, ?, ?, ?)")) {
             stmnt.setString(1, name);
             stmnt.setString(2, password);
             stmnt.setBoolean(3, sex);
@@ -157,6 +156,32 @@ class DatabaseConnector {
             stmnt.registerOutParameter(5, Types.INTEGER);
             stmnt.execute();
             return stmnt.getInt(5);
+        } catch (SQLException e) {
+            if (e.getSQLState().equals("23000"))
+                System.out.println("Phone number " + phone + " already registered!");
+            else
+                e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * Login as a student
+     * @param sID sID of student to login as
+     * @param password password of the student
+     * @return sID of student if successful, -1 if unsuccessful
+     */
+    static int logInAsStudent(Integer sID, String password) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStudentPasswordByID (?, ?)")) {
+            stmnt.setInt(1, sID);
+            stmnt.registerOutParameter(2, Types.VARCHAR);
+            stmnt.execute();
+            if (stmnt.getString(2).equals(password)) {
+                return sID;
+            } else {
+                return -1;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;

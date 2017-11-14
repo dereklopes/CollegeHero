@@ -94,6 +94,15 @@ CREATE PROCEDURE getStudentByID(IN ID INT)
     WHERE sID = ID;
   END//
 
+DROP PROCEDURE IF EXISTS getStudentPasswordByID//
+CREATE PROCEDURE getStudentPasswordByID(IN ID INT, OUT pass VARCHAR(60))
+  BEGIN
+    SELECT password
+    INTO pass
+    FROM student
+    WHERE sID = ID;
+  END//
+
 DROP PROCEDURE IF EXISTS getStaffByID//
 CREATE PROCEDURE getStaffByID(IN ID INT)
   BEGIN
