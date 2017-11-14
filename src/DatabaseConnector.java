@@ -167,7 +167,8 @@ class DatabaseConnector {
 
     /**
      * Login as a student
-     * @param sID sID of student to login as
+     *
+     * @param sID      sID of student to login as
      * @param password password of the student
      * @return sID of student if successful, -1 if unsuccessful
      */
