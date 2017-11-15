@@ -5,12 +5,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Scanner;
 
 class DatabaseConnector {
 
     private Connection connection;
 
-    DatabaseConnector() {
+    private DatabaseConnector() {
         connection = getConnection();
     }
 
@@ -86,6 +87,7 @@ class DatabaseConnector {
             ResultSetMetaData rsmd = result.getMetaData();
             int columnCount = rsmd.getColumnCount();
             ArrayList<HashMap<String, String>> resultList = new ArrayList<>();
+            result.next();
             do {
                 HashMap<String, String> row = new HashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
@@ -211,6 +213,45 @@ class DatabaseConnector {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    /**
+     * Get account info by type and phone number
+     *
+     * @param phone the phone number to search for
+     * @param type  the type of account to search for (ex. student or staff)
+     */
+    static void getAccountByPhone(String phone, String type) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        switch (type) {
+            case "student":
+                try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStudentIDByPhone (?)")) {
+                    stmnt.setString(1, phone);
+                    if (stmnt.execute()) {
+                        printResultSet(stmnt.getResultSet());
+                        return;
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                break;
+            case "staff":
+                try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStaffIDByPhone (?)")) {
+                    stmnt.setString(1, phone);
+                    if (stmnt.execute()) {
+                        printResultSet(stmnt.getResultSet());
+                        return;
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                break;
+            default:
+                System.err.println("Unknown account type: " + type);
+        }
+        System.out.println(type + " account not found for phone number " + phone);
     }
 
     static void printAllFromTable(String table) {

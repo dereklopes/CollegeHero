@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.util.Scanner;
 
 public class CLI {
@@ -17,8 +18,7 @@ public class CLI {
                             "[3] Register as new student\n" +
                             "[4] Search for ID by phone number"
             );
-            Integer[] options = {0, 1, 2, 3, 4, 5};
-            Integer decision = getOption(options);
+            Integer decision = getOption(new Integer[]{0, 1, 2, 3, 4});
             switch (decision) {
                 case 0:
                     System.out.println("Exiting...");
@@ -74,6 +74,7 @@ public class CLI {
 
     /**
      * Log into an account, prompting for a password and verifying against DB.
+     *
      * @param type the type of account to log into (ex. student or staff)
      * @return ID of the account logged into, or -1 on error
      */
@@ -139,7 +140,17 @@ public class CLI {
      */
     private static void getAccountByPhone() {
         clearConsole();
-        System.out.println("");
+        System.out.println("Enter the account type:\n[1] Student\n[2] Staff");
+        Integer typeChoice = getOption(new Integer[]{1, 2});
+        String type = "student";
+        if (typeChoice == 2)
+            type = "staff";
+        System.out.printf("Enter the phone number: ");
+        Scanner scanner = new Scanner(System.in);
+        String phone = scanner.nextLine();
+        DatabaseConnector.getAccountByPhone(phone, type);
+        System.out.println("Press enter to cotinue...");
+        scanner.nextLine();
     }
 
     /**
