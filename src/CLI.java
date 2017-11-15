@@ -15,8 +15,7 @@ public class CLI {
                             "[1] Login as student\n" +
                             "[2] Login as staff\n" +
                             "[3] Register as new student\n" +
-                            "[4] Search for ID by phone nubmer\n" +
-                            "[5] Login as admin"
+                            "[4] Search for ID by phone number"
             );
             Integer[] options = {0, 1, 2, 3, 4, 5};
             Integer decision = getOption(options);
@@ -46,12 +45,15 @@ public class CLI {
                         loginType = "student";
                     }
                     break;
+                case 4:
+                    getAccountByPhone();
+                    break;
                 default:
                     System.out.println("This feature is not implemented yet");
             }
         }
 
-        // Studnet action screen
+        // Student action screen
         if (loginType.equals("student")) {
             clearConsole();
             System.out.printf("--- Logged in as student ID: %s ---\n", ID.toString());
@@ -63,12 +65,6 @@ public class CLI {
             System.out.printf("--- Logged in as staff ID: %s ---\n", ID.toString());
             System.out.println("Action phase, later you can do things like take attendance");
         }
-        // Admin action screen
-        if (loginType.equals("admin")) {
-            clearConsole();
-            System.out.printf("--- Logged in as admin ID: %s ---\n", ID.toString());
-            System.out.println("Action phase, later you can do things like create a class");
-        }
         // SHOULDN'T GET IN HERE
         if (loginType.equals("none")) {
             clearConsole();
@@ -78,10 +74,11 @@ public class CLI {
 
     /**
      * Log into an account, prompting for a password and verifying against DB.
-     * @param type the type of account to log into (ex. student, staff, admin)
+     * @param type the type of account to log into (ex. student or staff)
      * @return ID of the account logged into, or -1 on error
      */
     private static int logIn(String type) {
+        clearConsole();
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Enter your " + type + " ID: ");
         Integer ID = scanner.nextInt();
@@ -101,8 +98,6 @@ public class CLI {
                     return ID;
                 }
                 break;
-            case "admin":
-                break;
             default:
                 System.out.println("Unknown account type: " + type);
                 return -1;
@@ -117,6 +112,7 @@ public class CLI {
      * @return the student ID of the newly created user, or -1 on error
      */
     private static int createStudent() {
+        clearConsole();
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Enter your full name: ");
         String name = scanner.nextLine();
@@ -136,6 +132,14 @@ public class CLI {
         }
         System.out.println("There was an error creating your account.");
         return -1;
+    }
+
+    /**
+     * Prompts for an account type and phone number, then displays results of search.
+     */
+    private static void getAccountByPhone() {
+        clearConsole();
+        System.out.println("");
     }
 
     /**
