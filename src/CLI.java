@@ -13,7 +13,7 @@ public class CLI {
             System.out.println(
                     "[0] Exit\n" +
                             "[1] Login as student\n" +
-                            "[2] Login as teacher\n" +
+                            "[2] Login as staff\n" +
                             "[3] Register as new student\n" +
                             "[4] Search for ID by phone nubmer\n" +
                             "[5] Login as admin"
@@ -26,17 +26,24 @@ public class CLI {
                     exit = true;
                     break;
                 case 1:
-                    ID = loginAsStudent();
+                    ID = logIn("student");
                     if (ID > 0) {
                         loggedIn = true;
-                        loginType = "s";
+                        loginType = "student";
+                    }
+                    break;
+                case 2:
+                    ID = logIn("staff");
+                    if (ID > 0) {
+                        loggedIn = true;
+                        loginType = "staff";
                     }
                     break;
                 case 3:
                     ID = createStudent();
                     if (ID > 0) {
                         loggedIn = true;
-                        loginType = "s";
+                        loginType = "student";
                     }
                     break;
                 default:
@@ -45,71 +52,63 @@ public class CLI {
         }
 
         // Studnet action screen
-        if (loginType.equals("s")) {
+        if (loginType.equals("student")) {
             clearConsole();
             System.out.printf("--- Logged in as student ID: %s ---\n", ID.toString());
             System.out.println("Action phase, later you can do things like enroll in a class");
         }
         // Teacher action screen
-        if (loginType.equals("t")) {
+        if (loginType.equals("staff")) {
             clearConsole();
-            System.out.printf("--- Logged in as student ID: %s ---\n", ID.toString());
+            System.out.printf("--- Logged in as staff ID: %s ---\n", ID.toString());
             System.out.println("Action phase, later you can do things like take attendance");
         }
         // Admin action screen
-        if (loginType.equals("a")) {
+        if (loginType.equals("admin")) {
             clearConsole();
-            System.out.printf("--- Logged in as student ID: %s ---\n", ID.toString());
+            System.out.printf("--- Logged in as admin ID: %s ---\n", ID.toString());
             System.out.println("Action phase, later you can do things like create a class");
+        }
+        // SHOULDN'T GET IN HERE
+        if (loginType.equals("none")) {
+            clearConsole();
+            System.err.println("Somehow got past login screen");
         }
     }
 
     /**
-     * Log in as a student user. Prompts for ID and password, then verifies against the DB.
-     *
-     * @return ID of the student logged in as, or -1 on error
+     * Log into an account, prompting for a password and verifying against DB.
+     * @param type the type of account to log into (ex. student, staff, admin)
+     * @return ID of the account logged into, or -1 on error
      */
-    private static int loginAsStudent() {
+    private static int logIn(String type) {
         Scanner scanner = new Scanner(System.in);
-        System.out.printf("Enter your student ID: ");
-        Integer sID = scanner.nextInt();
+        System.out.printf("Enter your " + type + " ID: ");
+        Integer ID = scanner.nextInt();
         System.out.printf("Enter your password: ");
         scanner.nextLine();
         String password = getPassword();
-        if (sID == DatabaseConnector.logInAsStudent(sID, password)) {
-            System.out.println("Logged in as student " + sID.toString());
-            return sID;
-        } else {
-            System.out.println("Failed to log in.");
-            return -1;
+        switch (type) {
+            case "student":
+                if (ID == DatabaseConnector.logInAsStudent(ID, password)) {
+                    System.out.println("Logged in as student " + ID.toString());
+                    return ID;
+                }
+                break;
+            case "staff":
+                if (ID == DatabaseConnector.logInAsStaff(ID, password)) {
+                    System.out.println("Logged in as staff " + ID.toString());
+                    return ID;
+                }
+                break;
+            case "admin":
+                break;
+            default:
+                System.out.println("Unknown account type: " + type);
+                return -1;
         }
-    }
-
-    /**
-     * Prompts for input and gets a valid response
-     *
-     * @param options - integer array to validate input against
-     * @return user's choice, validated
-     */
-    private static Integer getOption(Integer[] options) {
-        boolean isValid = false;
-        Integer input = -1;
-        Scanner scanner = new Scanner(System.in);
-
-        while (!isValid) {
-            System.out.printf("Enter an option [");
-            for (int i = 0; i < options.length - 1; i++) {
-                System.out.printf("%d, ", options[i]);
-            }
-            System.out.printf("%d]: ", options[options.length - 1]);
-
-            input = scanner.nextInt();
-            for (Integer num : options) {
-                if (num.equals(input))
-                    isValid = true;
-            }
-        }
-        return input;
+        System.out.println("Failed to log in.");
+        return -1;
     }
 
     /**
@@ -137,6 +136,33 @@ public class CLI {
         }
         System.out.println("There was an error creating your account.");
         return -1;
+    }
+
+    /**
+     * Prompts for input and gets a valid response
+     *
+     * @param options - integer array to validate input against
+     * @return user's choice, validated
+     */
+    private static Integer getOption(Integer[] options) {
+        boolean isValid = false;
+        Integer input = -1;
+        Scanner scanner = new Scanner(System.in);
+
+        while (!isValid) {
+            System.out.printf("Enter an option [");
+            for (int i = 0; i < options.length - 1; i++) {
+                System.out.printf("%d, ", options[i]);
+            }
+            System.out.printf("%d]: ", options[options.length - 1]);
+
+            input = scanner.nextInt();
+            for (Integer num : options) {
+                if (num.equals(input))
+                    isValid = true;
+            }
+        }
+        return input;
     }
 
     /**
