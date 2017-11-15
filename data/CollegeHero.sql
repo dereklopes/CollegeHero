@@ -154,37 +154,17 @@ CREATE PROCEDURE createStaff
 DROP PROCEDURE IF EXISTS getAllSectionInfoByClassID;
 CREATE PROCEDURE getAllSectionInfoByID(IN ID VARCHAR(45))
     BEGIN
-        SELECT
-        class.cID,
-        class.section,
-        class.subject,
-        class.tID,
-        class.rID,
-        class.days,
-        class.start_at,
-        class.end_at,
-        class.capacity,
-        class.cost,
-    FROM class
-    WHERE class.cID = ID;
+        SELECT *
+        FROM class
+        WHERE class.cID = ID;
     END//
 
     DROP PROCEDURE IF EXISTS getAllSectionInfoBySubject;
     CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
         BEGIN
-            SELECT
-            class.cID,
-            class.section,
-            class.subject,
-            class.tID,
-            class.rID,
-            class.days,
-            class.start_at,
-            class.end_at,
-            class.capacity,
-            class.cost,
-        FROM class
-        WHERE class.subject = subject;
+            SELECT *
+            FROM class
+            WHERE class.subject = subject;
         END//
 
 -- Triggers

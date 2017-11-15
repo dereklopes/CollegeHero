@@ -16,10 +16,10 @@ public class CLI {
                             "[2] Login as teacher\n" +
                             "[3] Register as new student\n" +
                             "[4] Search for ID by phone number\n" +
-                            "[5] Login as admin\n" +
-                            "[6] Retrieve all section information by Class ID"
+                            "[5] Login as admin\n"
+
             );
-            Integer[] options = {0, 1, 2, 3, 4, 5, 6};
+            Integer[] options = {0, 1, 2, 3, 4, 5};
             Integer decision = getOption(options);
             switch (decision) {
                 case 0:
@@ -179,7 +179,7 @@ public class CLI {
             System.out.println(" " + cID.toString());
             return cID;
         } else {
-            System.out.println("Failed to print all section info.");
+            System.out.println("Failed to print all section info.\n");
             return -1;
         }
     }
