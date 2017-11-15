@@ -111,6 +111,15 @@ CREATE PROCEDURE getStaffByID(IN ID INT)
     WHERE tID = ID;
   END//
 
+DROP PROCEDURE IF EXISTS getStaffPasswordByID//
+CREATE PROCEDURE getStaffPasswordByID(IN ID INT, OUT pass VARCHAR(60))
+  BEGIN
+    SELECT password
+    INTO pass
+    FROM staff
+    WHERE tID = ID;
+  END//
+
 DROP PROCEDURE IF EXISTS getStudentIDByPhone//
 CREATE PROCEDURE getStudentIDByPhone(IN phone VARCHAR(10))
   BEGIN
