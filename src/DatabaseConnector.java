@@ -189,6 +189,21 @@ class DatabaseConnector {
         }
     }
 
+    static int getAllSectionInfoByClassID(Integer cID) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getAllSectionByClassID (?)")) {
+            stmnt.setInt(1, cID);
+            if (stmnt.execute()) {
+                printResultSet(stmnt.getResultSet());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+
+
     static void printAllFromTable(String table) {
         DatabaseConnector dbc = new DatabaseConnector();
         ResultSet result = dbc.executeStatement("SELECT * FROM " + table);

@@ -15,10 +15,11 @@ public class CLI {
                             "[1] Login as student\n" +
                             "[2] Login as teacher\n" +
                             "[3] Register as new student\n" +
-                            "[4] Search for ID by phone nubmer\n" +
-                            "[5] Login as admin"
+                            "[4] Search for ID by phone number\n" +
+                            "[5] Login as admin\n" +
+                            "[6] Retrieve all section information by Class ID"
             );
-            Integer[] options = {0, 1, 2, 3, 4, 5};
+            Integer[] options = {0, 1, 2, 3, 4, 5, 6};
             Integer decision = getOption(options);
             switch (decision) {
                 case 0:
@@ -167,6 +168,19 @@ public class CLI {
             // Happens when running in an IDE
             Scanner scanner = new Scanner(System.in);
             return scanner.nextLine();
+        }
+    }
+
+    private static int getAllSectionInfoByClassID() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("Enter your class ID (cID): ");
+        Integer cID = scanner.nextInt();
+        if (cID == DatabaseConnector.getAllSectionInfoByClassID(cID)) {
+            System.out.println(" " + cID.toString());
+            return cID;
+        } else {
+            System.out.println("Failed to print all section info.");
+            return -1;
         }
     }
 }
