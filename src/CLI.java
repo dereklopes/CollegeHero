@@ -15,11 +15,9 @@ public class CLI {
                             "[1] Login as student\n" +
                             "[2] Login as teacher\n" +
                             "[3] Register as new student\n" +
-                            "[4] Search for ID by phone number\n" +
-                            "[5] Login as admin\n"
-
+                            "[4] Search for ID by phone number\n"
             );
-            Integer[] options = {0, 1, 2, 3, 4, 5};
+            Integer[] options = {0, 1, 2, 3, 4};
             Integer decision = getOption(options);
             switch (decision) {
                 case 0:
