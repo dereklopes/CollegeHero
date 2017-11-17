@@ -190,10 +190,35 @@ class DatabaseConnector {
         }
     }
 
+    /**
+     *
+     * @param cID cID of the subject
+     * @return cID of student if successful, -1 if unsuccessful
+     */
+
     static int getAllSectionInfoByClassID(Integer cID) {
         DatabaseConnector dbc = new DatabaseConnector();
         try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getAllSectionByClassID (?)")) {
             stmnt.setInt(1, cID);
+            if (stmnt.execute()) {
+                printResultSet(stmnt.getResultSet());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     *
+     * @param subject subject that is trying to be searched
+     * @return All class info from the subject
+     */
+
+    static int getAllSectionInfoBySubject(String subject) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getAllSectionInfoBySubject (?)")) {
+            stmnt.setString(1, subject);
             if (stmnt.execute()) {
                 printResultSet(stmnt.getResultSet());
             }

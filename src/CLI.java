@@ -206,6 +206,11 @@ public class CLI {
         }
     }
 
+    /**
+     *
+     * @return cID to get all section and class information
+     */
+
     private static int getAllSectionInfoByClassID() {
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Enter your class ID (cID): ");
@@ -216,6 +221,25 @@ public class CLI {
         } else {
             System.out.println("Failed to print all section info.\n");
             return -1;
+        }
+    }
+
+    /**
+     *
+     * @return subject to get all class information
+     */
+
+    private static String getAllSectionInfoBySubject() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("Enter your subject: ");
+        String subject = scanner.nextLine();
+        int number = Integer.parseInt(subject);
+        if ( number == DatabaseConnector.getAllSectionInfoBySubject(subject)) {
+            System.out.println(" " + subject.toString());
+            return subject;
+        } else {
+            System.out.println("Failed to print all section info.\n");
+            return null;
         }
     }
 }
