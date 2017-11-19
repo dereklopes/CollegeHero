@@ -176,6 +176,13 @@ CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
     WHERE class.subject = subject;
   END//
 
+DROP PROCEDURE IF EXISTS logAttendance;
+CREATE PROCEDURE logAttendance(IN sID INT, IN cID INT, IN classDay DATE)
+  BEGIN
+    INSERT INTO attendance
+    VALUES (sID, cID, classDay);
+  END//
+
 -- Triggers
 
 CREATE TRIGGER updateTuition
