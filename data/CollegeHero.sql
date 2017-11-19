@@ -181,10 +181,18 @@ CREATE PROCEDURE getStudentSchedule(IN sID INT)
   BEGIN
     SELECT *
     FROM class
-    WHERE class.cID in (SELECT enrolled.cID
-                       FROM enrolled
-                       WHERE enrolled.sID = sID);
+    WHERE class.cID IN (SELECT enrolled.cID
+                        FROM enrolled
+                        WHERE enrolled.sID = sID);
   END//
+
+DROP PROCEDURE IF EXISTS getStaffSchedule;
+CREATE PROCEDURE getStaffSchedule(IN tID INT)
+  BEGIN
+    SELECT *
+    FROM class
+    WHERE class.tID = tID;
+  END //
 
 -- Triggers
 
