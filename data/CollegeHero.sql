@@ -160,6 +160,22 @@ CREATE PROCEDURE createStaff
     INSERT INTO staff VALUES (NULL, name, password, department, staffType, phone);
   END//
 
+DROP PROCEDURE IF EXISTS getAllSectionInfoByClassID;
+CREATE PROCEDURE getAllSectionInfoByID(IN ID VARCHAR(45))
+  BEGIN
+    SELECT *
+    FROM class
+    WHERE class.cID = ID;
+  END//
+
+DROP PROCEDURE IF EXISTS getAllSectionInfoBySubject;
+CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
+  BEGIN
+    SELECT *
+    FROM class
+    WHERE class.subject = subject;
+  END//
+
 -- Triggers
 
 CREATE TRIGGER updateTuition

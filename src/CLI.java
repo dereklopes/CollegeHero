@@ -16,7 +16,7 @@ public class CLI {
                             "[1] Login as student\n" +
                             "[2] Login as staff\n" +
                             "[3] Register as new student\n" +
-                            "[4] Search for ID by phone number"
+                            "[4] Search for ID by phone number\n"
             );
             Integer decision = getOption(new Integer[]{0, 1, 2, 3, 4});
             switch (decision) {
@@ -64,11 +64,6 @@ public class CLI {
             clearConsole();
             System.out.printf("--- Logged in as staff ID: %s ---\n", ID.toString());
             System.out.println("Action phase, later you can do things like take attendance");
-        }
-        // SHOULDN'T GET IN HERE
-        if (loginType.equals("none")) {
-            clearConsole();
-            System.err.println("Somehow got past login screen");
         }
     }
 
@@ -208,6 +203,43 @@ public class CLI {
             // Happens when running in an IDE
             Scanner scanner = new Scanner(System.in);
             return scanner.nextLine();
+        }
+    }
+
+    /**
+     *
+     * @return cID to get all section and class information
+     */
+
+    private static int getAllSectionInfoByClassID() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("Enter your class ID (cID): ");
+        Integer cID = scanner.nextInt();
+        if (cID == DatabaseConnector.getAllSectionInfoByClassID(cID)) {
+            System.out.println(" " + cID.toString());
+            return cID;
+        } else {
+            System.out.println("Failed to print all section info.\n");
+            return -1;
+        }
+    }
+
+    /**
+     *
+     * @return subject to get all class information
+     */
+
+    private static String getAllSectionInfoBySubject() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("Enter your subject: ");
+        String subject = scanner.nextLine();
+        int number = Integer.parseInt(subject);
+        if ( number == DatabaseConnector.getAllSectionInfoBySubject(subject)) {
+            System.out.println(" " + subject.toString());
+            return subject;
+        } else {
+            System.out.println("Failed to print all section info.\n");
+            return null;
         }
     }
 }
