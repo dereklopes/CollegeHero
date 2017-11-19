@@ -176,6 +176,16 @@ CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
     WHERE class.subject = subject;
   END//
 
+DROP PROCEDURE IF EXISTS getStudentSchedule;
+CREATE PROCEDURE getStudentSchedule(IN sID INT)
+  BEGIN
+    SELECT *
+    FROM class
+    WHERE class.cID in (SELECT enrolled.cID
+                       FROM enrolled
+                       WHERE enrolled.sID = sID);
+  END//
+
 -- Triggers
 
 CREATE TRIGGER updateTuition
