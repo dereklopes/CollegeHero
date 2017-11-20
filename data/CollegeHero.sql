@@ -176,6 +176,24 @@ CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
     WHERE class.subject = subject;
   END//
 
+DROP PROCEDURE IF EXISTS getStudentSchedule;
+CREATE PROCEDURE getStudentSchedule(IN sID INT)
+  BEGIN
+    SELECT *
+    FROM class
+    WHERE class.cID IN (SELECT enrolled.cID
+                        FROM enrolled
+                        WHERE enrolled.sID = sID);
+  END//
+
+DROP PROCEDURE IF EXISTS getStaffSchedule;
+CREATE PROCEDURE getStaffSchedule(IN tID INT)
+  BEGIN
+    SELECT *
+    FROM class
+    WHERE class.tID = tID;
+  END //
+
 DROP PROCEDURE IF EXISTS logAttendance;
 CREATE PROCEDURE logAttendance(IN sID INT, IN cID INT, IN classDay DATE)
   BEGIN
