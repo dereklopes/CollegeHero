@@ -39,7 +39,7 @@ CREATE TABLE staff
   name        VARCHAR(255) NOT NULL,
   password    VARCHAR(60)  NOT NULL,
   department  INT,
-  staffTypeID INT,
+  staffTypeID BOOLEAN,
   phone       VARCHAR(10),
   FOREIGN KEY (department) REFERENCES department (dID)
 );
@@ -222,6 +222,30 @@ CREATE PROCEDURE payTuition(IN sID INT, IN amount INT)
     UPDATE student
     SET tuition=tuition-amount
     WHERE student.sID=sID;
+  END//
+
+DROP PROCEDURE IF EXISTS getStaffByName//
+CREATE PROCEDURE getStaffByName(IN staffName VARCHAR(255))
+  BEGIN
+    SELECT staff.tID, staff.name, staff.department, staff.phone, staff.staffTypeID
+    FROM staff
+    WHERE staff.name=staffName;
+  END//
+
+DROP PROCEDURE IF EXISTS getStaffByDepartment//
+CREATE PROCEDURE getStaffByDepartment(IN department VARCHAR(255))
+  BEGIN
+    SELECT staff.tID, staff.name, staff.department, staff.phone, staff.staffTypeID
+    FROM staff
+    WHERE staff.department=department;
+  END//
+
+DROP PROCEDURE IF EXISTS getStaffByType//
+CREATE PROCEDURE getStaffByType(IN type BOOLEAN)
+  BEGIN
+    SELECT staff.tID, staff.name, staff.department, staff.phone, staff.staffTypeID
+    FROM staff
+    WHERE staff.staffTypeID=type;
   END//
 
 -- Triggers
