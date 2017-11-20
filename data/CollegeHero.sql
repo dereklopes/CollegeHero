@@ -76,12 +76,13 @@ CREATE TABLE enrolled
 DROP TABLE IF EXISTS attendance;
 CREATE TABLE attendance
 (
-  sID INT,
-  cID INT,
-  day DATE,
+  sID     INT,
+  cID     INT,
+  section INT,
+  day     DATE,
   PRIMARY KEY (sID, cID, day),
   FOREIGN KEY (sID) REFERENCES student (sID),
-  FOREIGN KEY (cID) REFERENCES class (cID)
+  FOREIGN KEY (cID, section) REFERENCES class (cID, section)
 );
 
 -- Procedures
@@ -163,11 +164,11 @@ CREATE PROCEDURE createStaff
   END//
 
 DROP PROCEDURE IF EXISTS getAllSectionInfoByClassID;
-CREATE PROCEDURE getAllSectionInfoByID(IN ID VARCHAR(45))
+CREATE PROCEDURE getAllSectionInfoByClassID(IN cID INT)
   BEGIN
     SELECT *
     FROM class
-    WHERE class.cID = ID;
+    WHERE class.cID = cID;
   END//
 
 DROP PROCEDURE IF EXISTS getAllSectionInfoBySubject//
@@ -197,10 +198,10 @@ CREATE PROCEDURE getStaffSchedule(IN tID INT)
   END //
 
 DROP PROCEDURE IF EXISTS logAttendance//
-CREATE PROCEDURE logAttendance(IN sID INT, IN cID INT, IN classDay DATE)
+CREATE PROCEDURE logAttendance(IN sID INT, IN cID INT, IN section INT, IN classDay DATE)
   BEGIN
     INSERT INTO attendance
-    VALUES (sID, cID, classDay);
+    VALUES (sID, cID, section, classDay);
   END//
 
 DROP PROCEDURE IF EXISTS enrollInClass//
@@ -318,6 +319,14 @@ CREATE PROCEDURE getStudentsEnrolled(IN cID INT, IN section INT)
                           WHERE enrolled.cID = cID
                                 AND enrolled.section = section);
   END//
+
+DROP PROCEDURE IF EXISTS getStudentAttendance//
+CREATE PROCEDURE getStudentAttendance(IN sID INT)
+  BEGIN
+    SELECT *
+    FROM attendance
+    WHERE attendance.sID = sID;
+  END //
 
 -- Triggers
 
