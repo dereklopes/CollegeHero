@@ -208,6 +208,14 @@ CREATE PROCEDURE enrollInClass(IN sID INT, IN cID INT)
     VALUES (sID, cID);
   END//
 
+DROP PROCEDURE IF EXISTS unEnrollInClass//
+CREATE PROCEDURE unEnrollInClass(IN sID INT, IN cID INT)
+  BEGIN
+    DELETE FROM enrolled
+    WHERE enrolled.sID=sID
+    AND enrolled.cID=cID;
+  END//
+
 DROP PROCEDURE IF EXISTS payTuition//
 CREATE PROCEDURE payTuition(IN sID INT, IN amount INT)
   BEGIN
@@ -218,8 +226,8 @@ CREATE PROCEDURE payTuition(IN sID INT, IN amount INT)
 
 -- Triggers
 
-DROP TRIGGER IF EXISTS updateTuition//
-CREATE TRIGGER updateTuition
+DROP TRIGGER IF EXISTS increaseTuition//
+CREATE TRIGGER increaseTuition
 BEFORE INSERT ON enrolled
 FOR EACH ROW
   BEGIN
@@ -228,6 +236,18 @@ FOR EACH ROW
                              FROM class
                              WHERE cID = new.cID)
     WHERE student.sID = new.sID;
+  END//
+
+DROP TRIGGER IF EXISTS lowerTuition//
+CREATE TRIGGER lowerTuition
+BEFORE DELETE ON enrolled
+FOR EACH ROW
+  BEGIN
+    UPDATE student
+    SET tuition = tuition - (SELECT cost
+                             FROM class
+                             WHERE cID = old.cID)
+    WHERE student.sID = old.sID;
   END//
 
 DROP TRIGGER IF EXISTS checkCapacity//
