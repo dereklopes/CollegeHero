@@ -194,6 +194,13 @@ CREATE PROCEDURE getStaffSchedule(IN tID INT)
     WHERE class.tID = tID;
   END //
 
+DROP PROCEDURE IF EXISTS logAttendance;
+CREATE PROCEDURE logAttendance(IN sID INT, IN cID INT, IN classDay DATE)
+  BEGIN
+    INSERT INTO attendance
+    VALUES (sID, cID, classDay);
+  END//
+
 -- Triggers
 
 CREATE TRIGGER updateTuition
