@@ -39,7 +39,7 @@ CREATE TABLE staff
   name        VARCHAR(255) NOT NULL,
   password    VARCHAR(60)  NOT NULL,
   department  INT,
-  staffTypeID INT,
+  staffTypeID BOOLEAN,
   phone       VARCHAR(10),
   FOREIGN KEY (department) REFERENCES department (dID)
 );
@@ -47,7 +47,7 @@ CREATE TABLE staff
 DROP TABLE IF EXISTS class;
 CREATE TABLE class
 (
-  cID      INT PRIMARY KEY AUTO_INCREMENT,
+  cID      INT,
   section  INT         NOT NULL,
   subject  VARCHAR(45) NOT NULL,
   tID      INT,
@@ -58,7 +58,8 @@ CREATE TABLE class
   capacity INT         NOT NULL,
   cost     INT         NOT NULL,
   FOREIGN KEY (tID) REFERENCES staff (tID),
-  FOREIGN KEY (rID) REFERENCES room (rID)
+  FOREIGN KEY (rID) REFERENCES room (rID),
+  PRIMARY KEY (cID, section)
 );
 
 DROP TABLE IF EXISTS enrolled;
@@ -168,7 +169,7 @@ CREATE PROCEDURE getAllSectionInfoByID(IN ID VARCHAR(45))
     WHERE class.cID = ID;
   END//
 
-DROP PROCEDURE IF EXISTS getAllSectionInfoBySubject;
+DROP PROCEDURE IF EXISTS getAllSectionInfoBySubject//
 CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
   BEGIN
     SELECT *
@@ -176,7 +177,7 @@ CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
     WHERE class.subject = subject;
   END//
 
-DROP PROCEDURE IF EXISTS getStudentSchedule;
+DROP PROCEDURE IF EXISTS getStudentSchedule//
 CREATE PROCEDURE getStudentSchedule(IN sID INT)
   BEGIN
     SELECT *
@@ -186,7 +187,7 @@ CREATE PROCEDURE getStudentSchedule(IN sID INT)
                         WHERE enrolled.sID = sID);
   END//
 
-DROP PROCEDURE IF EXISTS getStaffSchedule;
+DROP PROCEDURE IF EXISTS getStaffSchedule//
 CREATE PROCEDURE getStaffSchedule(IN tID INT)
   BEGIN
     SELECT *
@@ -194,16 +195,119 @@ CREATE PROCEDURE getStaffSchedule(IN tID INT)
     WHERE class.tID = tID;
   END //
 
-DROP PROCEDURE IF EXISTS logAttendance;
+DROP PROCEDURE IF EXISTS logAttendance//
 CREATE PROCEDURE logAttendance(IN sID INT, IN cID INT, IN classDay DATE)
   BEGIN
     INSERT INTO attendance
     VALUES (sID, cID, classDay);
   END//
 
+DROP PROCEDURE IF EXISTS enrollInClass//
+CREATE PROCEDURE enrollInClass(IN sID INT, IN cID INT)
+  BEGIN
+    INSERT INTO enrolled
+    VALUES (sID, cID);
+  END//
+
+DROP PROCEDURE IF EXISTS unEnrollInClass//
+CREATE PROCEDURE unEnrollInClass(IN sID INT, IN cID INT)
+  BEGIN
+    DELETE FROM enrolled
+    WHERE enrolled.sID = sID
+          AND enrolled.cID = cID;
+  END//
+
+DROP PROCEDURE IF EXISTS payTuition//
+CREATE PROCEDURE payTuition(IN sID INT, IN amount INT)
+  BEGIN
+    UPDATE student
+    SET tuition = tuition - amount
+    WHERE student.sID = sID;
+  END//
+
+DROP PROCEDURE IF EXISTS getStaffByName//
+CREATE PROCEDURE getStaffByName(IN staffName VARCHAR(255))
+  BEGIN
+    SELECT
+      staff.tID,
+      staff.name,
+      staff.department,
+      staff.phone,
+      staff.staffTypeID
+    FROM staff
+    WHERE staff.name = staffName;
+  END//
+
+DROP PROCEDURE IF EXISTS getStaffByDepartment//
+CREATE PROCEDURE getStaffByDepartment(IN department VARCHAR(255))
+  BEGIN
+    SELECT
+      staff.tID,
+      staff.name,
+      staff.department,
+      staff.phone,
+      staff.staffTypeID
+    FROM staff
+    WHERE staff.department = department;
+  END//
+
+DROP PROCEDURE IF EXISTS getStaffByType//
+CREATE PROCEDURE getStaffByType(IN type BOOLEAN)
+  BEGIN
+    SELECT
+      staff.tID,
+      staff.name,
+      staff.department,
+      staff.phone,
+      staff.staffTypeID
+    FROM staff
+    WHERE staff.staffTypeID = type;
+  END//
+
+DROP PROCEDURE IF EXISTS changeStudentPhone//
+CREATE PROCEDURE changeStudentPhone(IN sID INT, IN phone VARCHAR(10))
+  BEGIN
+    UPDATE student
+    SET student.phone = phone
+    WHERE student.sID = sID;
+  END//
+
+DROP PROCEDURE IF EXISTS changeStudentPassword//
+CREATE PROCEDURE changeStudentPassword(IN sID INT, IN pwd VARCHAR(60))
+  BEGIN
+    UPDATE student
+    SET student.password = pwd
+    WHERE student.sID = sID;
+  END//
+
+DROP PROCEDURE IF EXISTS changeClassInstructor//
+CREATE PROCEDURE changeClassInstructor(IN cID INT, IN tID INT)
+  BEGIN
+    UPDATE class
+    SET class.tID = tID
+    WHERE class.cID = cID;
+  END//
+
+DROP PROCEDURE IF EXISTS getRoomSchedule//
+CREATE PROCEDURE getRoomSchedule(IN rID INT)
+  BEGIN
+    SELECT *
+    FROM class
+    WHERE class.rID = rID;
+  END//
+
+DROP PROCEDURE IF EXISTS createClass//
+CREATE PROCEDURE createClass(IN cID  INT, IN section INT, IN subjct VARCHAR(45), IN tID INT, IN rID INT,
+                             IN days VARCHAR(15), IN start_at TIME, IN end_at TIME, IN capacity INT, IN cost INT)
+  BEGIN
+    INSERT INTO class
+    VALUES (cID, section, subjct, tID, rID, days, start_at, end_at, capacity, cost);
+  END//
+
 -- Triggers
 
-CREATE TRIGGER updateTuition
+DROP TRIGGER IF EXISTS increaseTuition//
+CREATE TRIGGER increaseTuition
 BEFORE INSERT ON enrolled
 FOR EACH ROW
   BEGIN
@@ -214,6 +318,19 @@ FOR EACH ROW
     WHERE student.sID = new.sID;
   END//
 
+DROP TRIGGER IF EXISTS lowerTuition//
+CREATE TRIGGER lowerTuition
+BEFORE DELETE ON enrolled
+FOR EACH ROW
+  BEGIN
+    UPDATE student
+    SET tuition = tuition - (SELECT cost
+                             FROM class
+                             WHERE cID = old.cID)
+    WHERE student.sID = old.sID;
+  END//
+
+DROP TRIGGER IF EXISTS checkCapacity//
 CREATE TRIGGER checkCapacity
 BEFORE INSERT ON enrolled
 FOR EACH ROW
@@ -227,9 +344,26 @@ FOR EACH ROW
         FROM class
         WHERE class.cID = new.cID)
     THEN SIGNAL SQLSTATE '45000'
-    SET MESSAGE_TEXT = "That class is at full capacity";
+    SET MESSAGE_TEXT = 'That class is at full capacity';
     END IF;
   END//
+
+DROP TRIGGER IF EXISTS checkClassTimeConflict//
+CREATE TRIGGER checkClassTimeConflict
+BEFORE INSERT ON class
+FOR EACH ROW
+  BEGIN
+    IF (SELECT cID
+        FROM class
+        WHERE rID = new.rID
+              AND days LIKE CONCAT('%', new.days, '%')
+              AND ((end_at >= new.start_at AND start_at <= new.start_at)
+                   OR
+                   (end_at >= new.end_at AND start_at <= new.end_at)))
+    THEN SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'There is a class scheduled in that room at that time';
+    END IF;
+  END //
 
 DELIMITER ;
 
