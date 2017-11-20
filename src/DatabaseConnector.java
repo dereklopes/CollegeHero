@@ -179,7 +179,7 @@ class DatabaseConnector {
             stmnt.setInt(1, sID);
             stmnt.registerOutParameter(2, Types.VARCHAR);
             stmnt.execute();
-            if (stmnt.getString(2).equals(password)) {
+            if (stmnt.getString(2) != null && stmnt.getString(2).equals(password)) {
                 return sID;
             } else {
                 return -1;

@@ -164,7 +164,7 @@ DROP PROCEDURE IF EXISTS createStudent//
 CREATE PROCEDURE createStudent(IN  name VARCHAR(255), IN password VARCHAR(60), IN sex BOOLEAN, IN phone VARCHAR(10),
                                OUT ID   VARCHAR(255))
   BEGIN
-    INSERT INTO student VALUES (NULL, name, password, sex, phone, 0);
+    INSERT INTO student VALUES (NULL, name, password, sex, phone, 0, NULL);
     SELECT student.sID
     INTO ID
     FROM student
