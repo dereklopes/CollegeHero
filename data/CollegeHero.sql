@@ -7,12 +7,13 @@ USE CollegeHero;
 DROP TABLE IF EXISTS student;
 CREATE TABLE student
 (
-  sID      INT PRIMARY KEY AUTO_INCREMENT,
-  name     VARCHAR(255)  NOT NULL,
-  password VARCHAR(60)   NOT NULL,
-  sex      BOOLEAN,
-  phone    VARCHAR(10) UNIQUE,
-  tuition  INT DEFAULT 0 NOT NULL
+  sID       INT PRIMARY KEY AUTO_INCREMENT,
+  name      VARCHAR(255)  NOT NULL,
+  password  VARCHAR(60)   NOT NULL,
+  sex       BOOLEAN,
+  phone     VARCHAR(10) UNIQUE,
+  tuition   INT DEFAULT 0 NOT NULL,
+  updatedAt TIMESTAMP       DEFAULT CURRENT_TIMESTAMP()
 );
 
 DROP TABLE IF EXISTS room;
@@ -83,6 +84,20 @@ CREATE TABLE attendance
   PRIMARY KEY (sID, cID, day),
   FOREIGN KEY (sID) REFERENCES student (sID),
   FOREIGN KEY (cID, section) REFERENCES class (cID, section)
+);
+
+DROP TABLE IF EXISTS studentArchive;
+CREATE TABLE studentArchive
+(
+  ID        INT PRIMARY KEY AUTO_INCREMENT,
+  sID       INT,
+  name      VARCHAR(255)  NOT NULL,
+  password  VARCHAR(60)   NOT NULL,
+  sex       BOOLEAN,
+  phone     VARCHAR(10) UNIQUE,
+  tuition   INT DEFAULT 0 NOT NULL,
+  updatedAt TIMESTAMP,
+  UNIQUE (sID)
 );
 
 -- Procedures
@@ -326,7 +341,19 @@ CREATE PROCEDURE getStudentAttendance(IN sID INT)
     SELECT *
     FROM attendance
     WHERE attendance.sID = sID;
-  END //
+  END//
+
+DROP PROCEDURE IF EXISTS archiveStudents//
+CREATE PROCEDURE archiveStudents(IN updatedBy DATE)
+  BEGIN
+    INSERT INTO studentArchive
+    (sID, name, password, sex, phone, tuition, updatedAt)
+      (SELECT *
+       FROM student
+       WHERE student.updatedAt < updatedBy);
+    DELETE FROM student
+    WHERE student.updatedAt < updatedBy;
+  END//
 
 -- Triggers
 
