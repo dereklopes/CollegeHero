@@ -248,6 +248,22 @@ CREATE PROCEDURE getStaffByType(IN type BOOLEAN)
     WHERE staff.staffTypeID=type;
   END//
 
+DROP PROCEDURE IF EXISTS changeStudentPhone//
+CREATE PROCEDURE changeStudentPhone(IN sID INT, IN phone VARCHAR(10))
+  BEGIN
+    UPDATE student
+    SET student.phone=phone
+    WHERE student.sID=sID;
+  END //
+
+DROP PROCEDURE IF EXISTS changeStudentPassword//
+CREATE PROCEDURE changeStudentPassword(IN sID INT, IN pwd VARCHAR(60))
+  BEGIN
+    UPDATE student
+    SET student.password=pwd
+    WHERE student.sID=sID;
+  END //
+
 -- Triggers
 
 DROP TRIGGER IF EXISTS increaseTuition//
