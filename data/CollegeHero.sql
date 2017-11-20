@@ -65,11 +65,12 @@ CREATE TABLE class
 DROP TABLE IF EXISTS enrolled;
 CREATE TABLE enrolled
 (
-  sID INT,
-  cID INT,
-  PRIMARY KEY (sID, cID),
+  sID     INT,
+  cID     INT,
+  section INT,
+  PRIMARY KEY (sID, cID, section),
   FOREIGN KEY (sID) REFERENCES student (sID),
-  FOREIGN KEY (cID) REFERENCES class (cID)
+  FOREIGN KEY (cID, section) REFERENCES class (cID, section)
 );
 
 DROP TABLE IF EXISTS attendance;
@@ -203,18 +204,19 @@ CREATE PROCEDURE logAttendance(IN sID INT, IN cID INT, IN classDay DATE)
   END//
 
 DROP PROCEDURE IF EXISTS enrollInClass//
-CREATE PROCEDURE enrollInClass(IN sID INT, IN cID INT)
+CREATE PROCEDURE enrollInClass(IN sID INT, IN cID INT, IN section INT)
   BEGIN
     INSERT INTO enrolled
-    VALUES (sID, cID);
+    VALUES (sID, cID, section);
   END//
 
 DROP PROCEDURE IF EXISTS unEnrollInClass//
-CREATE PROCEDURE unEnrollInClass(IN sID INT, IN cID INT)
+CREATE PROCEDURE unEnrollInClass(IN sID INT, IN cID INT, IN section INT)
   BEGIN
     DELETE FROM enrolled
     WHERE enrolled.sID = sID
-          AND enrolled.cID = cID;
+          AND enrolled.cID = cID
+          AND enrolled.section = section;
   END//
 
 DROP PROCEDURE IF EXISTS payTuition//
@@ -304,6 +306,19 @@ CREATE PROCEDURE createClass(IN cID  INT, IN section INT, IN subjct VARCHAR(45),
     VALUES (cID, section, subjct, tID, rID, days, start_at, end_at, capacity, cost);
   END//
 
+DROP PROCEDURE IF EXISTS getStudentsEnrolled//
+CREATE PROCEDURE getStudentsEnrolled(IN cID INT, IN section INT)
+  BEGIN
+    SELECT
+      student.name,
+      student.phone
+    FROM student
+    WHERE student.sID IN (SELECT sID
+                          FROM enrolled
+                          WHERE enrolled.cID = cID
+                                AND enrolled.section = section);
+  END//
+
 -- Triggers
 
 DROP TRIGGER IF EXISTS increaseTuition//
@@ -314,7 +329,8 @@ FOR EACH ROW
     UPDATE student
     SET tuition = tuition + (SELECT cost
                              FROM class
-                             WHERE cID = new.cID)
+                             WHERE cID = new.cID
+                                   AND section = new.section)
     WHERE student.sID = new.sID;
   END//
 
@@ -326,7 +342,8 @@ FOR EACH ROW
     UPDATE student
     SET tuition = tuition - (SELECT cost
                              FROM class
-                             WHERE cID = old.cID)
+                             WHERE cID = old.cID
+                                   AND section = old.section)
     WHERE student.sID = old.sID;
   END//
 
