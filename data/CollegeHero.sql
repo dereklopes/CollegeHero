@@ -168,7 +168,7 @@ CREATE PROCEDURE getAllSectionInfoByID(IN ID VARCHAR(45))
     WHERE class.cID = ID;
   END//
 
-DROP PROCEDURE IF EXISTS getAllSectionInfoBySubject;
+DROP PROCEDURE IF EXISTS getAllSectionInfoBySubject//
 CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
   BEGIN
     SELECT *
@@ -176,7 +176,7 @@ CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
     WHERE class.subject = subject;
   END//
 
-DROP PROCEDURE IF EXISTS getStudentSchedule;
+DROP PROCEDURE IF EXISTS getStudentSchedule//
 CREATE PROCEDURE getStudentSchedule(IN sID INT)
   BEGIN
     SELECT *
@@ -186,7 +186,7 @@ CREATE PROCEDURE getStudentSchedule(IN sID INT)
                         WHERE enrolled.sID = sID);
   END//
 
-DROP PROCEDURE IF EXISTS getStaffSchedule;
+DROP PROCEDURE IF EXISTS getStaffSchedule//
 CREATE PROCEDURE getStaffSchedule(IN tID INT)
   BEGIN
     SELECT *
@@ -194,15 +194,31 @@ CREATE PROCEDURE getStaffSchedule(IN tID INT)
     WHERE class.tID = tID;
   END //
 
-DROP PROCEDURE IF EXISTS logAttendance;
+DROP PROCEDURE IF EXISTS logAttendance//
 CREATE PROCEDURE logAttendance(IN sID INT, IN cID INT, IN classDay DATE)
   BEGIN
     INSERT INTO attendance
     VALUES (sID, cID, classDay);
   END//
 
+DROP PROCEDURE IF EXISTS enrollInClass//
+CREATE PROCEDURE enrollInClass(IN sID INT, IN cID INT)
+  BEGIN
+    INSERT INTO enrolled
+    VALUES (sID, cID);
+  END//
+
+DROP PROCEDURE IF EXISTS payTuition//
+CREATE PROCEDURE payTuition(IN sID INT, IN amount INT)
+  BEGIN
+    UPDATE student
+    SET tuition=tuition-amount
+    WHERE student.sID=sID;
+  END//
+
 -- Triggers
 
+DROP TRIGGER IF EXISTS updateTuition//
 CREATE TRIGGER updateTuition
 BEFORE INSERT ON enrolled
 FOR EACH ROW
@@ -214,6 +230,7 @@ FOR EACH ROW
     WHERE student.sID = new.sID;
   END//
 
+DROP TRIGGER IF EXISTS checkCapacity//
 CREATE TRIGGER checkCapacity
 BEFORE INSERT ON enrolled
 FOR EACH ROW
