@@ -194,6 +194,26 @@ CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
     WHERE class.subject = subject;
   END//
 
+DROP PROCEDURE IF EXISTS getAllStudentOwingTuition;//
+CREATE PROCEDURE getAllStudentOwingTuiton(IN sID INT)
+    Begin
+        SELECT *
+        FROM student
+        GROUP BY sID HAVING tuition > 0;
+    END//
+
+DROP PROCEDURE IF EXISTS getAllStudentEnrolledInClass;//
+CREATE PROCEDURE getAllStudentEnrolledInClass(IN sID INT)
+    Begin
+        SELECT *
+        FROM student
+        WHERE student.sID = sID
+        UNION
+        SELECT *
+        FROM enroll
+        WHERE enroll.sID = sID;
+    END//
+
 DROP PROCEDURE IF EXISTS getStudentSchedule//
 CREATE PROCEDURE getStudentSchedule(IN sID INT)
   BEGIN
