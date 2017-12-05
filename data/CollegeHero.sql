@@ -214,7 +214,7 @@ CREATE PROCEDURE getAllStudentEnrolledInClass(IN sID INT)
         WHERE enroll.sID = sID;
     END//
 
-DROP PROCEDURE IF EXISTS getAllClassInformationFromRoomNumber
+DROP PROCEDURE IF EXISTS getAllClassInformationFromRoomNumber//
 CREATE PROCEDURE getAllClassInformationFromRoomNumber(IN rID INT)
 SELECT a.cID,a.section,a.subject,a.tID,a.rID,a.days,a.start_at,a.end_at,a.capacity,a.cost
 FROM class a
@@ -222,6 +222,7 @@ WHERE a.rID = (
 SELECT b.rID
 FROM room b 
 WHERE b.roomNumber = "001");
+END//
 
 DROP PROCEDURE IF EXISTS getStudentSchedule//
 CREATE PROCEDURE getStudentSchedule(IN sID INT)
