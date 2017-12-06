@@ -1,17 +1,10 @@
-package gui;
-
 public class Login extends javax.swing.JFrame {
-    public static String type = "none";
     /**
      * Creates new form login
      */
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
-    }
-    
-    public static String getUserType(){
-        return type;
     }
     
     /**
@@ -101,12 +94,11 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginStudentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginStudentButtonActionPerformed
-        LoginDialog loginDlg = new LoginDialog(this);
+        LoginDialog loginDlg = new LoginDialog(this, "student");
         loginDlg.setVisible(true);
         // if logon successfully
         if(loginDlg.isSucceeded()){
             //show studentUI for logged in user
-            type = "Student";
             StudentUI student = new StudentUI(loginDlg.getID());
             student.setVisible(true);
             student.setAlwaysOnTop(true);
@@ -114,12 +106,11 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_loginStudentButtonActionPerformed
 
     private void loginStaffButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginStaffButtonActionPerformed
-        LoginDialog loginDlg = new LoginDialog(this);
+        LoginDialog loginDlg = new LoginDialog(this, "staff");
         loginDlg.setVisible(true);
         // if logon successfully
         if(loginDlg.isSucceeded()){
             //show staffUI for logged in user
-            type = "Staff";
             StaffUI staff = new StaffUI(loginDlg.getID());
             staff.setVisible(true);
             staff.setLocationRelativeTo(null);

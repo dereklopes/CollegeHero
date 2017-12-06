@@ -1,12 +1,10 @@
-package gui;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
- 
+
 public class LoginDialog extends JDialog {
- 
+
     private JTextField tfUsername;
     private JPasswordField pfPassword;
     private JLabel lbUsername;
@@ -15,48 +13,48 @@ public class LoginDialog extends JDialog {
     private JButton btnCancel;
     private boolean succeeded;
     public Integer id;
- 
-    public LoginDialog(Frame parent) {
+
+    public LoginDialog(Frame parent, String type) {
         super(parent, "Login", true);
         //
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints cs = new GridBagConstraints();
- 
+
         cs.fill = GridBagConstraints.HORIZONTAL;
- 
-        lbUsername = new JLabel("Username: ");
+
+        lbUsername = new JLabel(type + " ID: ");
         cs.gridx = 0;
         cs.gridy = 0;
         cs.gridwidth = 1;
         panel.add(lbUsername, cs);
- 
+
         tfUsername = new JTextField(20);
         cs.gridx = 1;
         cs.gridy = 0;
         cs.gridwidth = 2;
         panel.add(tfUsername, cs);
- 
+
         lbPassword = new JLabel("Password: ");
         cs.gridx = 0;
         cs.gridy = 1;
         cs.gridwidth = 1;
         panel.add(lbPassword, cs);
- 
+
         pfPassword = new JPasswordField(20);
         cs.gridx = 1;
         cs.gridy = 1;
         cs.gridwidth = 2;
         panel.add(pfPassword, cs);
         panel.setBorder(new LineBorder(Color.GRAY));
- 
+
         btnLogin = new JButton("Login");
- 
+
         btnLogin.addActionListener(new ActionListener() {
- 
+
             public void actionPerformed(ActionEvent e) {
-                if (authenticate(getUserType(), getUsername(), getPassword())) {
+                if (authenticate(type, getUsername(), getPassword())) {
                     JOptionPane.showMessageDialog(LoginDialog.this,
-                            "Logged in as " + getUsername() + "! You have successfully logged in.",
+                            "Successfully logged in as ID " + getUsername() + "!",
                             "Login",
                             JOptionPane.INFORMATION_MESSAGE);
                     succeeded = true;
@@ -70,13 +68,13 @@ public class LoginDialog extends JDialog {
                     tfUsername.setText("");
                     pfPassword.setText("");
                     succeeded = false;
- 
+
                 }
             }
         });
         btnCancel = new JButton("Cancel");
         btnCancel.addActionListener(new ActionListener() {
- 
+
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
@@ -84,23 +82,19 @@ public class LoginDialog extends JDialog {
         JPanel bp = new JPanel();
         bp.add(btnLogin);
         bp.add(btnCancel);
- 
+
         getContentPane().add(panel, BorderLayout.CENTER);
         getContentPane().add(bp, BorderLayout.PAGE_END);
- 
+
         pack();
         setResizable(false);
         setLocationRelativeTo(parent);
     }
-    
-    public static String getUserType(){
-        return Login.getUserType();
-    }
-    
+
     public String getUsername() {
         return tfUsername.getText().trim();
     }
- 
+
     public String getPassword() {
         try {
             char[] pwdChars = pfPassword.getPassword();
@@ -113,27 +107,25 @@ public class LoginDialog extends JDialog {
         } catch (NullPointerException e) {
             return new String(pfPassword.getPassword());
         }
-        
-        
     }
- 
+
     public boolean isSucceeded() {
         return succeeded;
     }
-    
-    public Integer getID(){
-       return id;
+
+    public Integer getID() {
+        return id;
     }
-    
-    private boolean authenticate(String type,String ID, String pass){
+
+    private boolean authenticate(String type, String ID, String pass) {
         id = Integer.parseInt(ID);
-        if(type.equals("student")){
-            if (id == DatabaseConnector.logInAsStudent(id,pass)){
+        if (type.equals("student")) {
+            if (id == DatabaseConnector.logInAsStudent(id, pass)) {
                 return true;
             }
         }
-        if(type.equals("staff")){
-            if (id == DatabaseConnector.logInAsStaff(id, pass)){
+        if (type.equals("staff")) {
+            if (id == DatabaseConnector.logInAsStaff(id, pass)) {
                 return true;
             }
         }

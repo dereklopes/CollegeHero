@@ -11,7 +11,7 @@ class DatabaseConnector {
 
     private Connection connection;
 
-    private DatabaseConnector() {
+    DatabaseConnector() {
         connection = getConnection();
     }
 
@@ -82,7 +82,7 @@ class DatabaseConnector {
      * @return A list of hash maps with the column names as keys.
      * Each element in the list represents one row.
      */
-    private static ArrayList<HashMap<String, String>> createListFromResultSet(ResultSet result) {
+    static ArrayList<HashMap<String, String>> createListFromResultSet(ResultSet result) {
         try {
             ResultSetMetaData rsmd = result.getMetaData();
             int columnCount = rsmd.getColumnCount();
@@ -103,39 +103,54 @@ class DatabaseConnector {
     }
 
     /**
-     * Prints all attributes of a result set
-     *
-     * @param result - the result set to print out
+     * Create a string representation of a ResultSet object (as to be displayed later)
+     * @param result - the result set to create a string from
+     * @return A string representation of the result set
      */
-    private static void printResultSet(ResultSet result) {
+    private static String getStringFromResultSet(ResultSet result) {
         try {
             if (result == null) {
-                System.out.println("Empty result.");
-                return;
+                return "";
             }
             ResultSetMetaData rsmd = result.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
             ArrayList<HashMap<String, String>> resultList = DatabaseConnector.createListFromResultSet(result);
             if (resultList == null) {
                 System.out.println("Error getting result data.");
-                return;
+                return "Error getting result data.";
             }
             if (resultList.isEmpty()) {
                 System.out.println("Empty result.");
-                return;
+                return "Empty result.";
             }
+            StringBuilder bldr = new StringBuilder();
             for (HashMap<String, String> row :
                     resultList) {
                 for (int i = 1; i <= columnsNumber; i++) {
-                    if (i > 1) System.out.print(" | ");
+                    if (i > 1) bldr.append(" | ");
                     String columnValue = row.get(rsmd.getColumnName(i));
-                    System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
+                    bldr.append(rsmd.getColumnName(i));
+                    bldr.append(": ");
+                    bldr.append(columnValue);
                 }
-                System.out.println("");
+                bldr.append("\n");
             }
+            return bldr.toString();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return null;
+    }
+
+    /**
+     * Prints all attributes of a result set
+     *
+     * @param result - the result set to print out
+     */
+    private static String printResultSet(ResultSet result) {
+        String resultString = DatabaseConnector.getStringFromResultSet(result);
+        System.out.println(resultString);
+        return resultString;
     }
 
     /**
@@ -220,37 +235,37 @@ class DatabaseConnector {
      * @param phone the phone number to search for
      * @param type  the type of account to search for (ex. student or staff)
      */
-    static void getAccountByPhone(String phone, String type) {
+    static String getAccountByPhone(String phone, String type) {
         DatabaseConnector dbc = new DatabaseConnector();
         switch (type) {
             case "student":
                 try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStudentIDByPhone (?)")) {
                     stmnt.setString(1, phone);
                     if (stmnt.execute()) {
-                        printResultSet(stmnt.getResultSet());
-                        return;
+                        return printResultSet(stmnt.getResultSet());
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return;
+                    return "";
                 }
                 break;
             case "staff":
                 try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStaffIDByPhone (?)")) {
                     stmnt.setString(1, phone);
                     if (stmnt.execute()) {
-                        printResultSet(stmnt.getResultSet());
-                        return;
+                        return printResultSet(stmnt.getResultSet());
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    return;
+                    return "";
                 }
                 break;
             default:
                 System.err.println("Unknown account type: " + type);
         }
-        System.out.println(type + " account not found for phone number " + phone);
+        String resultString = type + " account not found for phone number " + phone;
+        System.out.println(resultString);
+        return resultString;
     }
 
     static void printAllFromTable(String table) {

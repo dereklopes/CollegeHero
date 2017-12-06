@@ -1,13 +1,11 @@
-package gui;
-
-public class StaffUI extends javax.swing.JFrame {
-    public String id = "";
+public class StudentUI extends javax.swing.JFrame {
+    public String ID = "";
     /**
-     * Creates new form staff
+     * Creates new form student
      */
-    public StaffUI(Integer sID) {
+    public StudentUI(Integer sID) {
         initComponents();
-        id = sID.toString();
+        ID = sID.toString();
         this.setLocationRelativeTo(null);
     }
 
@@ -36,6 +34,7 @@ public class StaffUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
