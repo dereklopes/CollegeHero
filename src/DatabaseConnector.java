@@ -1,6 +1,3 @@
-import sun.awt.geom.AreaOp;
-
-import javax.xml.crypto.Data;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
@@ -8,7 +5,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.Scanner;
 
 class DatabaseConnector {
 
