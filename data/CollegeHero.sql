@@ -160,6 +160,22 @@ CREATE PROCEDURE getStaffIDByPhone(IN phone VARCHAR(10))
     WHERE staff.phone = phone;
   END//
 
+DROP PROCEDURE IF EXISTS getStudentPhoneByID//
+CREATE PROCEDURE getStudentPhoneByID(IN sID INT)
+  BEGIN
+    SELECT phone
+    FROM student
+    WHERE student.sID = sID;
+  END//
+
+DROP PROCEDURE IF EXISTS getStaffPhoneByID//
+CREATE PROCEDURE getStaffPhoneByID(IN tID INT)
+  BEGIN
+    SELECT phone
+    FROM staff
+    WHERE staff.tID = tID;
+  END//
+
 DROP PROCEDURE IF EXISTS createStudent//
 CREATE PROCEDURE createStudent(IN  name VARCHAR(255), IN password VARCHAR(60), IN sex BOOLEAN, IN phone VARCHAR(10),
                                OUT ID   VARCHAR(255))
@@ -178,7 +194,7 @@ CREATE PROCEDURE createStaff
     INSERT INTO staff VALUES (NULL, name, password, department, staffType, phone);
   END//
 
-DROP PROCEDURE IF EXISTS getAllSectionInfoByClassID;
+DROP PROCEDURE IF EXISTS getAllSectionInfoByClassID//
 CREATE PROCEDURE getAllSectionInfoByClassID(IN cID INT)
   BEGIN
     SELECT *
@@ -194,46 +210,35 @@ CREATE PROCEDURE getAllSectionInfoBySubject(IN subject VARCHAR(45))
     WHERE class.subject = subject;
   END//
 
-DROP PROCEDURE IF EXISTS getAllStudentOwingTuition//
-CREATE PROCEDURE getAllStudentOwingTuiton(IN sID INT)
+DROP PROCEDURE IF EXISTS getClassByIDAndSection//
+CREATE PROCEDURE getClassByIDAndSection(IN cID INT, IN section INT)
   BEGIN
     SELECT *
+    FROM class
+    WHERE class.cID = cID
+          AND class.section = section;
+  END//
+
+DROP PROCEDURE IF EXISTS getAllStudentOwingTuition//
+CREATE PROCEDURE getAllStudentOwingTuition()
+  BEGIN
+    SELECT
+      sID,
+      name,
+      phone,
+      tuition
     FROM student
-    GROUP BY sID
     HAVING tuition > 0;
   END//
 
-DROP PROCEDURE IF EXISTS getAllStudentEnrolledInAClass//
-CREATE PROCEDURE getAllStudentEnrolledInClass(IN sID INT)
+DROP PROCEDURE IF EXISTS getAllStudentsEnrolledInClass//
+CREATE PROCEDURE getAllStudentsEnrolledInClass(IN cID INT)
   BEGIN
     SELECT *
     FROM student
-    WHERE student.sID = sID
-    UNION
-    SELECT *
-    FROM enroll
-    WHERE enroll.sID = sID;
-  END//
-
-DROP PROCEDURE IF EXISTS getAllClassInformationFromRoomNumber//
-CREATE PROCEDURE getAllClassInformationFromRoomNumber(IN roomNumber INT)
-  BEGIN
-    SELECT
-      a.cID,
-      a.section,
-      a.subject,
-      a.tID,
-      a.rID,
-      a.days,
-      a.start_at,
-      a.end_at,
-      a.capacity,
-      a.cost
-    FROM class a
-    WHERE a.rID = (
-      SELECT b.rID
-      FROM room b
-      WHERE b.roomNumber = roomNumber);
+    WHERE student.sID = (SELECT enrolled.sID
+                         FROM enrolled
+                         WHERE enrolled.cID = cID);
   END//
 
 DROP PROCEDURE IF EXISTS getStudentSchedule//
@@ -243,7 +248,10 @@ CREATE PROCEDURE getStudentSchedule(IN sID INT)
     FROM class
     WHERE class.cID IN (SELECT enrolled.cID
                         FROM enrolled
-                        WHERE enrolled.sID = sID);
+                        WHERE enrolled.sID = sID)
+          AND class.section IN (SELECT enrolled.section
+                                FROM enrolled
+                                WHERE enrolled.sID = sID);
   END//
 
 DROP PROCEDURE IF EXISTS getStaffSchedule//
@@ -278,10 +286,14 @@ CREATE PROCEDURE unEnrollInClass(IN sID INT, IN cID INT, IN section INT)
   END//
 
 DROP PROCEDURE IF EXISTS payTuition//
-CREATE PROCEDURE payTuition(IN sID INT, IN amount INT)
+CREATE PROCEDURE payTuition(IN sID INT, IN amount INT, OUT leftOver INT)
   BEGIN
     UPDATE student
     SET tuition = tuition - amount
+    WHERE student.sID = sID;
+    SELECT tuition
+    INTO leftOver
+    FROM student
     WHERE student.sID = sID;
   END//
 
@@ -295,7 +307,7 @@ CREATE PROCEDURE getStaffByName(IN staffName VARCHAR(255))
       staff.phone,
       staff.staffTypeID
     FROM staff
-    WHERE staff.name = staffName;
+    WHERE INSTR(staff.name, staffName);
   END//
 
 DROP PROCEDURE IF EXISTS getStaffByDepartment//
@@ -341,11 +353,12 @@ CREATE PROCEDURE changeStudentPassword(IN sID INT, IN pwd VARCHAR(60))
   END//
 
 DROP PROCEDURE IF EXISTS changeClassInstructor//
-CREATE PROCEDURE changeClassInstructor(IN cID INT, IN tID INT)
+CREATE PROCEDURE changeClassInstructor(IN cID INT, IN section INT, IN tID INT)
   BEGIN
     UPDATE class
     SET class.tID = tID
-    WHERE class.cID = cID;
+    WHERE class.cID = cID
+          AND class.section = section;
   END//
 
 DROP PROCEDURE IF EXISTS getRoomSchedule//
@@ -362,6 +375,10 @@ CREATE PROCEDURE createClass(IN cID  INT, IN section INT, IN subjct VARCHAR(45),
   BEGIN
     INSERT INTO class
     VALUES (cID, section, subjct, tID, rID, days, start_at, end_at, capacity, cost);
+    SELECT *
+    FROM class
+    WHERE class.cID = cID
+          AND class.section = section;
   END//
 
 DROP PROCEDURE IF EXISTS getStudentsEnrolled//
@@ -437,7 +454,8 @@ FOR EACH ROW
        =
        (SELECT capacity
         FROM class
-        WHERE class.cID = new.cID)
+        WHERE class.cID = new.cID
+              AND class.section = new.section)
     THEN SIGNAL SQLSTATE '45000'
     SET MESSAGE_TEXT = 'That class is at full capacity';
     END IF;
