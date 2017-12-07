@@ -1,17 +1,16 @@
 tID,name,password,department,staffTypeID,phone
 1,John Smith,pwd,013,0,4089751234
-2,Debra Le,pwd,013,0,6698569470
-3,William John,pwd,013,84068,2091197576
-4,Mary Jane,pwd,4,026,9259485760
-5,George Lopez,pwd,026,44567,4089901212
-6,Chelsea Dome,pwd,026,44123,6694890000
-7,M Oya,pwd,014,017,0,6694894568
+2,Debra Le,pwd,050,0,6698569470
+3,William John,pwd,051,0,2091197576
+4,Mary Jane,pwd,024,026,9259485760
+5,George Lopez,pwd,052,0,4089901212
+6,Chelsea Dome,pwd,053,1,6694890000
+7,M Oya,pwd,014,039,0,6694894568
 8,Debra Caires,pwd,033,1,4085984578
-9,Kim Suneuy,pwd,033,1,4086842946
-10,Cay Horstmann,pwd,033,1,4086495367
-11,Jim Taylor,pwd,039,0,6697894568
-12,Romeo Jai,pwd,039,0,4085692345
-13,Chris Pollet,pwd,039,1,4086489455
-14,Timothy Ly,pwd,017,0,4086491515
-15,Jonathan Stewart,pwd,017,4086935678
-
+9,Kim Suneuy,pwd,090,1,4086842946
+10,Cay Horstmann,pwd,091,1,4086495367
+11,Jim Taylor,pwd,080,0,6697894568
+12,Romeo Jai,pwd,081,0,4085692345
+13,Chris Pollet,pwd,026,1,4086489455
+14,Timothy Ly,pwd,075,0,4086491515
+15,Jonathan Stewart,pwd,076,4086935678
