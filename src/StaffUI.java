@@ -1,11 +1,17 @@
+import java.awt.Color;
+
 public class StaffUI extends javax.swing.JFrame {
     public String id = "";
+    Color blue = new Color(0,0,153);
+    Color yellow = new Color(255,255,0);
     /**
      * Creates new form staff
      */
     public StaffUI(Integer sID) {
         initComponents();
         id = sID.toString();
+        getContentPane().setBackground(blue);
+        this.setTitle("Course Hero: Staff - " + id);
         this.setLocationRelativeTo(null);
     }
 
@@ -24,11 +30,11 @@ public class StaffUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 650, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 500, Short.MAX_VALUE)
         );
 
         pack();
