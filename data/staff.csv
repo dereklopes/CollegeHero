@@ -2,7 +2,7 @@ tID,name,password,department,staffTypeID,phone
 1,John Smith,pwd,013,0,4089751234
 2,Debra Le,pwd,050,0,6698569470
 3,William John,pwd,051,0,2091197576
-4,Mary Jane,pwd,024,026,9259485760
+4,Mary Jane,pwd,024,0,9259485760
 5,George Lopez,pwd,052,0,4089901212
 6,Chelsea Dome,pwd,053,1,6694890000
 7,M Oya,pwd,014,0,6694894568
