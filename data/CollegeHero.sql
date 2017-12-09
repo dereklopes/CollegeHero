@@ -414,6 +414,15 @@ CREATE PROCEDURE archiveStudents(IN updatedBy DATE)
     WHERE student.updatedAt < updatedBy;
   END//
 
+DROP PROCEDURE IF EXISTS getStaffTypeById//
+CREATE PROCEDURE getStaffTypeByID(IN tID INT, OUT type BOOLEAN)
+  BEGIN
+    SELECT staff.staffTypeID
+    INTO type
+    FROM staff
+    WHERE staff.tID = tID;
+  END//
+
 -- Triggers
 
 DROP TRIGGER IF EXISTS increaseTuition//
