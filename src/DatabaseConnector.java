@@ -246,10 +246,6 @@ class DatabaseConnector {
     }
 
     /**
-=======
->>>>>>> origin/master
-=======
->>>>>>> master
      * Login as a staff memeber
      *
      * @param tID      tID of student to login as
