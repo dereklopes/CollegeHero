@@ -384,14 +384,22 @@ CREATE PROCEDURE createClass(IN cID  INT, IN section INT, IN subjct VARCHAR(45),
 DROP PROCEDURE IF EXISTS getStudentsEnrolled//
 CREATE PROCEDURE getStudentsEnrolled(IN cID INT, IN section INT)
   BEGIN
-    SELECT
-      student.name,
-      student.phone
-    FROM student
-    WHERE student.sID IN (SELECT sID
-                          FROM enrolled
-                          WHERE enrolled.cID = cID
-                                AND enrolled.section = section);
+    (SELECT
+       student.name,
+       student.phone
+     FROM student
+     WHERE student.sID IN (SELECT sID
+                           FROM enrolled
+                           WHERE enrolled.cID = cID
+                                 AND enrolled.section = section))
+    UNION
+    (SELECT
+       staff.name,
+       staff.phone
+     FROM staff
+     WHERE staff.tID IN (SELECT tID
+                         FROM class
+                         WHERE class.cID = cID));
   END//
 
 DROP PROCEDURE IF EXISTS getStudentAttendance//
