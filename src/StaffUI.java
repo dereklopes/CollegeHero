@@ -9,6 +9,7 @@ import javax.swing.UIManager;
 
 public class StaffUI extends javax.swing.JFrame {
     public int ID = 0;
+    boolean type = false;
     Color blue = new Color(0,0,153);
     Color yellow = new Color(255,255,0);
     /**
@@ -22,6 +23,13 @@ public class StaffUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         UIManager UI = new UIManager();
         UI.put("OptionPane.background",blue);
+
+        // disable certain buttons based on account type
+        type = DatabaseConnector.getStaffTypeById(ID);
+        if (!type) {
+            createClassButton.setEnabled(false);
+            changeInstrButton.setEnabled(false);
+        }
     }
 
     /**

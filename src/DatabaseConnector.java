@@ -1,3 +1,6 @@
+import jdk.nashorn.internal.codegen.CompilerConstants;
+
+import javax.xml.crypto.Data;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
@@ -780,6 +783,19 @@ class DatabaseConnector {
         } catch (SQLException e) {
             e.printStackTrace();
             return "Error.";
+        }
+    }
+
+    static boolean getStaffTypeById(int tID) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStaffTypeByID (?, ?)")) {
+            stmnt.setInt(1, tID);
+            stmnt.registerOutParameter(2, Types.BOOLEAN);
+            stmnt.execute();
+            return stmnt.getBoolean(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
