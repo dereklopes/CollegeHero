@@ -215,7 +215,7 @@ class DatabaseConnector {
 
     static String getAllSectionInfoByClassID(Integer cID) {
         DatabaseConnector dbc = new DatabaseConnector();
-        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getAllSectionByClassID (?)")) {
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getAllSectionInfoByClassID (?)")) {
             stmnt.setInt(1, cID);
             if (stmnt.execute()) {
                 return printResultSet(stmnt.getResultSet());
@@ -576,10 +576,10 @@ class DatabaseConnector {
      * @param type type of the staff to search for
      * @return string representation of staff data with matching name
      */
-    static String getStaffByType(boolean type) {
+    static String getStaffByType(int type) {
         DatabaseConnector dbc = new DatabaseConnector();
         try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStaffByType (?)")) {
-            stmnt.setBoolean(1, type);
+            stmnt.setInt(1, type);
             if (stmnt.execute())
                 return printResultSet(stmnt.getResultSet());
             return "Error getting staff.";

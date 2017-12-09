@@ -356,12 +356,12 @@ public class StaffUI extends javax.swing.JFrame {
         String type = (String) JOptionPane.showInputDialog(this, 
                 "Enter Staff Type to Search",
                 "Search Staff by Type",JOptionPane.PLAIN_MESSAGE);
-        boolean typ;
+        int typ;
         if(type.equals("0")){
-            typ = false;
+            typ = 0;
         }
         else{
-            typ = true;
+            typ = 127;
         }
         if(!type.equals("")){
             String result = DatabaseConnector.getStaffByType(typ);
