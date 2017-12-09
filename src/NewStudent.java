@@ -13,6 +13,7 @@ public class NewStudent extends javax.swing.JFrame {
     public NewStudent() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("Course Hero: Create a New Student");
         getContentPane().setBackground(blue);
         nameLabel.setOpaque(true);
         passwordLabel.setOpaque(true);
@@ -94,7 +95,7 @@ public class NewStudent extends javax.swing.JFrame {
             }
         });
 
-        maleRadioButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        maleRadioButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         maleRadioButton.setForeground(new java.awt.Color(255, 255, 0));
         maleRadioButton.setText("Male");
         maleRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -111,7 +112,7 @@ public class NewStudent extends javax.swing.JFrame {
         genderLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         genderLabel.setText(" Select Your Gender: ");
 
-        femaleRadioButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        femaleRadioButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         femaleRadioButton.setForeground(new java.awt.Color(255, 255, 0));
         femaleRadioButton.setText("Female");
         femaleRadioButton.addActionListener(new java.awt.event.ActionListener() {

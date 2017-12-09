@@ -11,6 +11,7 @@ public class SearchPhone extends javax.swing.JFrame {
     public SearchPhone() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("Course Hero: Search Students or Staff by Phone");
         getContentPane().setBackground(blue);
         phoneLabel.setOpaque(true);
         accountLabel.setOpaque(true);
@@ -70,7 +71,7 @@ public class SearchPhone extends javax.swing.JFrame {
         accountLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         accountLabel.setText(" Select Account Type:");
 
-        studentRadioButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        studentRadioButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         studentRadioButton.setForeground(new java.awt.Color(255, 255, 0));
         studentRadioButton.setText("Student");
         studentRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -79,7 +80,7 @@ public class SearchPhone extends javax.swing.JFrame {
             }
         });
 
-        staffRadioButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        staffRadioButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         staffRadioButton.setForeground(new java.awt.Color(255, 255, 0));
         staffRadioButton.setText("Staff");
         staffRadioButton.addActionListener(new java.awt.event.ActionListener() {
@@ -157,7 +158,7 @@ public class SearchPhone extends javax.swing.JFrame {
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pack();
