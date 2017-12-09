@@ -145,7 +145,7 @@ public class DatabaseConnectorTest {
 
     @Test
     public void getStaffByType() throws Exception {
-        String result = DatabaseConnector.getStaffByType(false);
+        String result = DatabaseConnector.getStaffByType(0);
         assertNotEquals("Error.", result);
         assertNotEquals("Error getting staff.", result);
         assertNotEquals("Empty result.", result);

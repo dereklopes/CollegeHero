@@ -13,20 +13,25 @@ public class LoginDialog extends JDialog {
     private JButton btnCancel;
     private boolean succeeded;
     public Integer id;
-
+    Color blue = new Color(0,0,153);
+    Color yellow = new Color(255, 255, 0);
+    
     public LoginDialog(Frame parent, String type) {
         super(parent, "Login", true);
         //
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(blue);
         GridBagConstraints cs = new GridBagConstraints();
 
         cs.fill = GridBagConstraints.HORIZONTAL;
 
-        lbUsername = new JLabel(type + " ID: ");
+        lbUsername = new JLabel(" " + type + " ID: ");
+        lbUsername.setBackground(yellow);
         cs.gridx = 0;
         cs.gridy = 0;
         cs.gridwidth = 1;
         panel.add(lbUsername, cs);
+        lbUsername.setOpaque(true);
 
         tfUsername = new JTextField(20);
         cs.gridx = 1;
@@ -34,11 +39,14 @@ public class LoginDialog extends JDialog {
         cs.gridwidth = 2;
         panel.add(tfUsername, cs);
 
-        lbPassword = new JLabel("Password: ");
+        lbPassword = new JLabel(" Password: ");
         cs.gridx = 0;
         cs.gridy = 1;
         cs.gridwidth = 1;
         panel.add(lbPassword, cs);
+        lbPassword.setBackground(yellow);
+        lbPassword.setOpaque(true);
+        
 
         pfPassword = new JPasswordField(20);
         cs.gridx = 1;
@@ -48,6 +56,7 @@ public class LoginDialog extends JDialog {
         panel.setBorder(new LineBorder(Color.GRAY));
 
         btnLogin = new JButton("Login");
+        btnLogin.setBackground(yellow);
 
         btnLogin.addActionListener(new ActionListener() {
 
@@ -61,7 +70,7 @@ public class LoginDialog extends JDialog {
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(LoginDialog.this,
-                            "Invalid username or password",
+                            "Invalid ID or password",
                             "Login",
                             JOptionPane.ERROR_MESSAGE);
                     // reset username and password
@@ -73,6 +82,7 @@ public class LoginDialog extends JDialog {
             }
         });
         btnCancel = new JButton("Cancel");
+        btnCancel.setBackground(yellow);
         btnCancel.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -80,6 +90,7 @@ public class LoginDialog extends JDialog {
             }
         });
         JPanel bp = new JPanel();
+        bp.setBackground(blue);
         bp.add(btnLogin);
         bp.add(btnCancel);
 

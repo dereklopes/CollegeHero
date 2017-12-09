@@ -1,38 +1,35 @@
 import java.awt.Color;
 import javax.swing.ButtonGroup;
 
-public class SearchPhone extends javax.swing.JFrame {
-    public ButtonGroup group = new ButtonGroup();
-    public String userType = "";
-    Color blue = new Color(0,0,153);
+public class SearchID extends javax.swing.JFrame {
+
     /**
-     * Creates new form searchPhone
+     * Creates new form SearchID
      */
-    public SearchPhone() {
+    public String userType = "";
+    public ButtonGroup group = new ButtonGroup();
+    Color blue = new Color(0,0,153);
+    
+    public SearchID() {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.setTitle("Course Hero: Search Students or Staff by Phone");
+        this.setTitle("Course Hero: Search Students or Staff by ID");
         getContentPane().setBackground(blue);
-        phoneLabel.setOpaque(true);
+        IDLabel.setOpaque(true);
         accountLabel.setOpaque(true);
         group.add(staffRadioButton);
         group.add(studentRadioButton);
         searchButton.setEnabled(false);
-        phoneTextField.setEditable(true);
+        idNumberTextField.setEditable(true);
     }
-
-    public boolean check() {
-        if (group.getSelection() == null || phoneTextField.getText().equals("")) {
+    
+    public boolean check(){
+        if (group.getSelection() == null || idNumberTextField.getText().equals("")) {
             return false;
         } else {
             return true;
         }
     }
-
-    static void setPhoneText(String colName, String colVal) {
-        phoneTextArea.append(colName + ": " + colVal);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,34 +39,32 @@ public class SearchPhone extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        phoneLabel = new javax.swing.JLabel();
-        phoneTextField = new javax.swing.JTextField();
+        IDLabel = new javax.swing.JLabel();
         accountLabel = new javax.swing.JLabel();
+        idNumberTextField = new javax.swing.JTextField();
         studentRadioButton = new javax.swing.JRadioButton();
         staffRadioButton = new javax.swing.JRadioButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        phoneTextArea = new javax.swing.JTextArea();
         searchButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        idTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Course Hero - Search By Phone Number");
 
-        phoneLabel.setBackground(new java.awt.Color(255, 255, 0));
-        phoneLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        phoneLabel.setText(" Enter Phone Number:");
-
-        phoneTextField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        phoneTextField.setText("1234567890");
-        phoneTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                phoneTextFieldActionPerformed(evt);
-            }
-        });
+        IDLabel.setBackground(new java.awt.Color(255, 255, 0));
+        IDLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        IDLabel.setText(" Enter ID Number: ");
 
         accountLabel.setBackground(new java.awt.Color(255, 255, 0));
         accountLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         accountLabel.setText(" Select Account Type:");
+
+        idNumberTextField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        idNumberTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idNumberTextFieldActionPerformed(evt);
+            }
+        });
 
         studentRadioButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         studentRadioButton.setForeground(new java.awt.Color(255, 255, 0));
@@ -89,12 +84,6 @@ public class SearchPhone extends javax.swing.JFrame {
             }
         });
 
-        phoneTextArea.setEditable(false);
-        phoneTextArea.setColumns(20);
-        phoneTextArea.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
-        phoneTextArea.setRows(5);
-        jScrollPane1.setViewportView(phoneTextArea);
-
         searchButton.setBackground(new java.awt.Color(255, 255, 0));
         searchButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         searchButton.setText("Search");
@@ -113,65 +102,72 @@ public class SearchPhone extends javax.swing.JFrame {
             }
         });
 
+        idTextArea.setEditable(false);
+        idTextArea.setColumns(20);
+        idTextArea.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        idTextArea.setRows(5);
+        jScrollPane1.setViewportView(idTextArea);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
+                .addGap(55, 55, 55)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(phoneLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(accountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(78, 78, 78)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 539, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 56, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(IDLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(accountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(idNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(studentRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(staffRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(phoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(56, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(117, 117, 117)
-                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(143, 143, 143))
+                                .addComponent(staffRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(56, 56, 56))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(141, 141, 141))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(phoneLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(phoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
+                    .addComponent(IDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(idNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(accountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(studentRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(staffRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addGap(40, 40, 40))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void staffRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffRadioButtonActionPerformed
-        userType = "staff";
+    private void idNumberTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idNumberTextFieldActionPerformed
         if (check()) {
             searchButton.setEnabled(true);
         } else {
             searchButton.setEnabled(false);
         }
-    }//GEN-LAST:event_staffRadioButtonActionPerformed
+    }//GEN-LAST:event_idNumberTextFieldActionPerformed
 
     private void studentRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentRadioButtonActionPerformed
         userType = "student";
@@ -182,31 +178,33 @@ public class SearchPhone extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_studentRadioButtonActionPerformed
 
-    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        phoneTextArea.setText("");
-        phoneTextArea.append(DatabaseConnector.getAccountByPhone(phoneTextField.getText(), userType));
-    }//GEN-LAST:event_searchButtonActionPerformed
-
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        phoneTextField.setText("");
-        dispose();
-    }//GEN-LAST:event_cancelButtonActionPerformed
-
-    private void phoneTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneTextFieldActionPerformed
+    private void staffRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffRadioButtonActionPerformed
+        userType = "staff";
         if (check()) {
             searchButton.setEnabled(true);
         } else {
             searchButton.setEnabled(false);
         }
-    }//GEN-LAST:event_phoneTextFieldActionPerformed
+    }//GEN-LAST:event_staffRadioButtonActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        idTextArea.setText("");
+        int ID = Integer.parseInt(idNumberTextField.getText());
+        idTextArea.append(DatabaseConnector.getPhoneByID(ID, userType));
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        idNumberTextField.setText("");
+        dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel IDLabel;
     private javax.swing.JLabel accountLabel;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JTextField idNumberTextField;
+    private static javax.swing.JTextArea idTextArea;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel phoneLabel;
-    private static javax.swing.JTextArea phoneTextArea;
-    private javax.swing.JTextField phoneTextField;
     private javax.swing.JButton searchButton;
     private javax.swing.JRadioButton staffRadioButton;
     private javax.swing.JRadioButton studentRadioButton;

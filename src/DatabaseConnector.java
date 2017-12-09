@@ -206,6 +206,50 @@ class DatabaseConnector {
     }
 
     /**
+<<<<<<< HEAD
+<<<<<<< HEAD
+     *
+     * @param cID cID of the subject
+     * @return string of search result
+     */
+
+    static String getAllSectionInfoByClassID(Integer cID) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getAllSectionInfoByClassID (?)")) {
+            stmnt.setInt(1, cID);
+            if (stmnt.execute()) {
+                return printResultSet(stmnt.getResultSet());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     *
+     * @param subject subject that is trying to be searched
+     * @return All class info from the subject
+     */
+
+    static String getAllSectionInfoBySubject(String subject) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getAllSectionInfoBySubject (?)")) {
+            stmnt.setString(1, subject);
+            if (stmnt.execute()) {
+                return printResultSet(stmnt.getResultSet());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+=======
+>>>>>>> origin/master
+=======
+>>>>>>> master
      * Login as a staff memeber
      *
      * @param tID      tID of student to login as
@@ -532,10 +576,10 @@ class DatabaseConnector {
      * @param type type of the staff to search for
      * @return string representation of staff data with matching name
      */
-    static String getStaffByType(boolean type) {
+    static String getStaffByType(int type) {
         DatabaseConnector dbc = new DatabaseConnector();
         try (CallableStatement stmnt = dbc.connection.prepareCall("CALL getStaffByType (?)")) {
-            stmnt.setBoolean(1, type);
+            stmnt.setInt(1, type);
             if (stmnt.execute())
                 return printResultSet(stmnt.getResultSet());
             return "Error getting staff.";
