@@ -207,6 +207,7 @@ class DatabaseConnector {
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
      *
      * @param cID cID of the subject
      * @return string of search result
@@ -247,6 +248,8 @@ class DatabaseConnector {
     /**
 =======
 >>>>>>> origin/master
+=======
+>>>>>>> master
      * Login as a staff memeber
      *
      * @param tID      tID of student to login as
@@ -531,7 +534,7 @@ class DatabaseConnector {
      *
      * @param sID    student who is paying tuition
      * @param amount amount of tuition to pay
-     * @return remaining amount of tuition, or -1 on error
+     * @return remaining amount of tuition, or null on error
      */
     static Integer payTuition(int sID, int amount) {
         DatabaseConnector dbc = new DatabaseConnector();
@@ -544,7 +547,7 @@ class DatabaseConnector {
             return stmnt.getInt(3);
         } catch (SQLException e) {
             e.printStackTrace();
-            return -1;
+            return null;
         }
     }
 
