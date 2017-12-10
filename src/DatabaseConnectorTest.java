@@ -1,8 +1,6 @@
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import javax.xml.crypto.Data;
-
 import java.sql.Date;
 import java.sql.Time;
 
@@ -62,12 +60,14 @@ public class DatabaseConnectorTest {
 
     @Test
     public void getClassesBySubject() throws Exception {
-        assertEquals(3, DatabaseConnector.getClassesBySubject("math").split("\n").length);
+        assertEquals(3, DatabaseConnector.getClassesBySubject("Computer Science").split("\n").length);
     }
 
     @Test
     public void getClassesByID() throws Exception {
-        assertEquals(3, DatabaseConnector.getClassesByID(1).split("\n").length);
+        String result = DatabaseConnector.getClassesByID(1);
+        assertNotEquals("Error.", result);
+        assertNotEquals("Empty result.", result);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class DatabaseConnectorTest {
         assertNotEquals("", result);
         assertNotEquals("Error getting schedule.", result);
         assertNotEquals("Empty result.", result);
-        assertEquals(3, result.split("\n").length);
+        assertEquals(1, result.split("\n").length);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class DatabaseConnectorTest {
         assertNotEquals("Error.", result);
         assertNotEquals("Error getting staff.", result);
         assertNotEquals("Empty result.", result);
-        assertEquals(3, result.split("\n").length);
+        assertEquals(10, result.split("\n").length);
     }
 
     @Test
@@ -175,12 +175,12 @@ public class DatabaseConnectorTest {
         assertNotEquals("", result);
         assertNotEquals("Error.", result);
         assertNotEquals("Error getting room schedule.", result);
-        assertEquals(2, result.split("\n").length);
+        assertEquals(1, result.split("\n").length);
     }
 
     @Test
     public void createClass() throws Exception {
-        String result = DatabaseConnector.createClass(99, 1, "CS", 2, 2, "W",
+        String result = DatabaseConnector.createClass(999, 999, "CS", 2, 48, "W",
                 Time.valueOf("00:00:00"), Time.valueOf("00:00:01"), 10, 150);
         assertNotEquals("Error.", result);
         assertNotEquals("Error creating class.", result);
@@ -194,7 +194,8 @@ public class DatabaseConnectorTest {
         String result = DatabaseConnector.getStudentsEnrolledInSection(1, 1);
         assertNotEquals("Error.", result);
         assertNotEquals("Error getting enrolled students.", result);
-        assertEquals(2, result.split("\n").length);
+        // Plus one for teacher
+        assertEquals(3, result.split("\n").length);
         assertTrue(DatabaseConnector.unEnrollInClass(1, 1,1 ));
         assertTrue(DatabaseConnector.unEnrollInClass(2, 1, 1));
     }
@@ -202,7 +203,7 @@ public class DatabaseConnectorTest {
     @Test
     public void logAndGetStudentAttendance() throws Exception {
         assertTrue(DatabaseConnector.logAttendance(1, 1, 1, Date.valueOf("2017-01-01")));
-        assertTrue(DatabaseConnector.logAttendance(1, 4, 1, Date.valueOf("2017-01-02")));
+        assertTrue(DatabaseConnector.logAttendance(1, 2, 2, Date.valueOf("2017-01-02")));
 
         String getResult = DatabaseConnector.getStudentAttendance(1);
         assertNotEquals("Error.", getResult);
@@ -213,16 +214,16 @@ public class DatabaseConnectorTest {
     @Test
     public void isFullTimeStudent() throws Exception {
         assertTrue(DatabaseConnector.enrollInClass(1, 1,1 ));
-        assertTrue(DatabaseConnector.enrollInClass(1, 4,1 ));
-        assertTrue(DatabaseConnector.enrollInClass(1, 7,1 ));
+        assertTrue(DatabaseConnector.enrollInClass(1, 2,2 ));
+        assertTrue(DatabaseConnector.enrollInClass(1, 3,3 ));
         assertFalse(DatabaseConnector.isFullTimeStudent(1));
 
-        assertTrue(DatabaseConnector.enrollInClass(1, 7, 2));
+        assertTrue(DatabaseConnector.enrollInClass(1, 5, 1));
         assertTrue(DatabaseConnector.isFullTimeStudent(1));
 
         assertTrue(DatabaseConnector.unEnrollInClass(1, 1,1 ));
-        assertTrue(DatabaseConnector.unEnrollInClass(1, 4,1 ));
-        assertTrue(DatabaseConnector.unEnrollInClass(1, 7,1 ));
-        assertTrue(DatabaseConnector.unEnrollInClass(1, 7,2 ));
+        assertTrue(DatabaseConnector.unEnrollInClass(1, 2,2 ));
+        assertTrue(DatabaseConnector.unEnrollInClass(1, 3,3 ));
+        assertTrue(DatabaseConnector.unEnrollInClass(1, 5,1 ));
     }
 }
