@@ -70,7 +70,7 @@ CREATE TABLE enrolled
   cID     INT,
   section INT,
   PRIMARY KEY (sID, cID, section),
-  FOREIGN KEY (sID) REFERENCES student (sID),
+  FOREIGN KEY (sID) REFERENCES student (sID) ON DELETE CASCADE,
   FOREIGN KEY (cID, section) REFERENCES class (cID, section)
 );
 
