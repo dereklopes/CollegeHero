@@ -431,6 +431,16 @@ CREATE PROCEDURE getStaffTypeByID(IN tID INT, OUT type BOOLEAN)
     WHERE staff.tID = tID;
   END//
 
+DROP PROCEDURE IF EXISTS isFullTimeStudent//
+CREATE PROCEDURE isFullTimeStudent(IN sID INT, OUT fullTime BOOLEAN)
+  BEGIN
+    SELECT COUNT(sID) > 3
+    INTO fullTime
+    FROM enrolled
+    GROUP BY enrolled.sID
+    HAVING enrolled.sID = sID;
+  END //
+
 -- Triggers
 
 DROP TRIGGER IF EXISTS increaseTuition//

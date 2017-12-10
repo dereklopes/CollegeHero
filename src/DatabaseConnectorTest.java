@@ -209,4 +209,20 @@ public class DatabaseConnectorTest {
         assertNotEquals("Error getting student attendance.", getResult);
         assertEquals(2, getResult.split("\n").length);
     }
+
+    @Test
+    public void isFullTimeStudent() throws Exception {
+        assertTrue(DatabaseConnector.enrollInClass(1, 1,1 ));
+        assertTrue(DatabaseConnector.enrollInClass(1, 4,1 ));
+        assertTrue(DatabaseConnector.enrollInClass(1, 7,1 ));
+        assertFalse(DatabaseConnector.isFullTimeStudent(1));
+
+        assertTrue(DatabaseConnector.enrollInClass(1, 7, 2));
+        assertTrue(DatabaseConnector.isFullTimeStudent(1));
+
+        assertTrue(DatabaseConnector.unEnrollInClass(1, 1,1 ));
+        assertTrue(DatabaseConnector.unEnrollInClass(1, 4,1 ));
+        assertTrue(DatabaseConnector.unEnrollInClass(1, 7,1 ));
+        assertTrue(DatabaseConnector.unEnrollInClass(1, 7,2 ));
+    }
 }
