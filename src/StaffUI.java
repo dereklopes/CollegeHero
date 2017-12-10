@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.Box;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -30,6 +33,23 @@ public class StaffUI extends javax.swing.JFrame {
             createClassButton.setEnabled(false);
             changeInstrButton.setEnabled(false);
         }
+    }
+    
+    public static void newClassResults(NewClass newClass){
+        if(newClass.finished = true){
+            JOptionPane.showMessageDialog(null,
+                            "Successfully created a new class",
+                            "Create a New Class",
+                            JOptionPane.INFORMATION_MESSAGE);
+            searchTextArea.setText(newClass.getResult());
+          }
+          else{
+              JOptionPane.showMessageDialog(null,
+                            "Error: Failed to create a new class",
+                            "Create a New Class",
+                            JOptionPane.INFORMATION_MESSAGE);
+          
+          }
     }
 
     /**
@@ -242,11 +262,13 @@ public class StaffUI extends javax.swing.JFrame {
         int sID = 0;
         int cID = 0;
         int sec = 0;
-        Date day;
+        Date day = new Date(2017,12,9);
         JTextField sIDField = new JTextField(10);
         JTextField cIDField = new JTextField(10);
         JTextField secField = new JTextField(10);
-        JTextField dayField = new JTextField(10);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        JFormattedTextField dayField = new JFormattedTextField(dateFormat);
+        dayField.setText("yyyy-mm-dd");
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("Student ID:"));
         myPanel.add(sIDField);
@@ -262,10 +284,19 @@ public class StaffUI extends javax.swing.JFrame {
         int result = JOptionPane.showConfirmDialog(null, myPanel,
             "Please Enter Class and Section Numbers", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-          sID = Integer.parseInt(sIDField.getText());
-          cID = Integer.parseInt(cIDField.getText());
-          sec = Integer.parseInt(secField.getText());
-          day = Date.valueOf(dayField.getText());
+          if (sIDField.getText().equals("")){
+          }else{
+              sID = Integer.parseInt(sIDField.getText());
+          }
+          if (cIDField.getText().equals("")){}else{
+            cID = Integer.parseInt(cIDField.getText());
+          }
+          if (secField.getText().equals("")){}else{
+              sec = Integer.parseInt(secField.getText());
+          }
+          if (dayField.getText().equals("")){}else{
+              day = Date.valueOf(dayField.getText());
+          }
           if(DatabaseConnector.logAttendance(sID,cID,sec,day)){
               JOptionPane.showMessageDialog(null,
                             "Successfully logged attendance",
@@ -281,13 +312,14 @@ public class StaffUI extends javax.swing.JFrame {
           }
         }
         
+        
     }//GEN-LAST:event_logAttendanceButtonActionPerformed
 
     private void studentAttendanceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentAttendanceButtonActionPerformed
         // Dialog to enter sID to search
         String sID = (String) JOptionPane.showInputDialog(this, 
-                "Enter Staff Name to Search",
-                "Search Staff by Name",JOptionPane.PLAIN_MESSAGE);
+                "Enter Student ID to Search",
+                "Search Attendance by Student ID",JOptionPane.PLAIN_MESSAGE);
         int id = Integer.parseInt(sID);
         if(!sID.equals("")){
             String result = DatabaseConnector.getStudentAttendance(id);
@@ -423,23 +455,9 @@ public class StaffUI extends javax.swing.JFrame {
 
     private void createClassButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createClassButtonActionPerformed
         NewClass newClass = new NewClass();
-        newClass.setAlwaysOnTop(true);
         newClass.setVisible(true);
         newClass.setLocationRelativeTo(null);
-        if(newClass.finished = true){
-            JOptionPane.showMessageDialog(null,
-                            "Successfully created a new class",
-                            "Create a New Class",
-                            JOptionPane.INFORMATION_MESSAGE);
-            searchTextArea.setText(newClass.getResult());
-          }
-          else{
-              JOptionPane.showMessageDialog(null,
-                            "Error: Failed to create a new class",
-                            "Create a New Class",
-                            JOptionPane.INFORMATION_MESSAGE);
-          
-          }
+        
         
     }//GEN-LAST:event_createClassButtonActionPerformed
 
@@ -452,7 +470,7 @@ public class StaffUI extends javax.swing.JFrame {
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton roomScheduleButton;
     private javax.swing.JButton scheduleButton;
-    private javax.swing.JTextArea searchTextArea;
+    private static javax.swing.JTextArea searchTextArea;
     private javax.swing.JButton staffByNameButton;
     private javax.swing.JButton staffByTypeButton;
     private javax.swing.JButton studentAttendanceButton;

@@ -237,6 +237,12 @@ public class StudentUI extends javax.swing.JFrame {
     }//GEN-LAST:event_searchIDButtonActionPerformed
 
     private void tuitionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tuitionButtonActionPerformed
+        // Dialog to display remaining tuition
+        int tuition = DatabaseConnector.payTuition(ID,0);
+        JOptionPane.showMessageDialog(null,
+                            "Current Tuition Amount Owed: " + tuition,
+                            "Tuition",
+                            JOptionPane.INFORMATION_MESSAGE);
         // Dialog to pay tuition
         String pay = (String) JOptionPane.showInputDialog(this, 
                 "Enter Payment Amount",

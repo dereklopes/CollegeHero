@@ -1,4 +1,6 @@
+
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
     /**
@@ -11,7 +13,22 @@ public class Login extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         getContentPane().setBackground(blue);
     }
-    
+    public static void newClassResults(NewClass newClass){
+        if(newClass.finished = true){
+            JOptionPane.showMessageDialog(null,
+                            "Successfully created a new class",
+                            "Create a New Class",
+                            JOptionPane.INFORMATION_MESSAGE);
+            //searchTextArea.setText(newClass.getResult());
+          }
+          else{
+              JOptionPane.showMessageDialog(null,
+                            "Error: Failed to create a new class",
+                            "Create a New Class",
+                            JOptionPane.INFORMATION_MESSAGE);
+          
+          }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -133,7 +150,7 @@ public class Login extends javax.swing.JFrame {
             //show studentUI for logged in user
             StudentUI student = new StudentUI(loginDlg.getID());
             student.setVisible(true);
-            student.setAlwaysOnTop(true);
+            student.setLocationRelativeTo(null);
         }
     }//GEN-LAST:event_loginStudentButtonActionPerformed
 
@@ -146,28 +163,24 @@ public class Login extends javax.swing.JFrame {
             StaffUI staff = new StaffUI(loginDlg.getID());
             staff.setVisible(true);
             staff.setLocationRelativeTo(null);
-            staff.setAlwaysOnTop(true);
         }
     }//GEN-LAST:event_loginStaffButtonActionPerformed
 
     private void newStudentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newStudentButtonActionPerformed
         NewStudent newStudent = new NewStudent();
         newStudent.setVisible(true);
-        newStudent.setAlwaysOnTop(true);
         newStudent.setLocationRelativeTo(null);
     }//GEN-LAST:event_newStudentButtonActionPerformed
 
     private void searchPhoneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchPhoneButtonActionPerformed
         SearchPhone phone = new SearchPhone();
         phone.setVisible(true);
-        phone.setAlwaysOnTop(true);
         phone.setLocationRelativeTo(null);
     }//GEN-LAST:event_searchPhoneButtonActionPerformed
 
     private void newStudentButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newStudentButton1ActionPerformed
         SearchID id = new SearchID();
         id.setVisible(true);
-        id.setAlwaysOnTop(true);
         id.setLocationRelativeTo(null);
         
     }//GEN-LAST:event_newStudentButton1ActionPerformed

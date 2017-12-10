@@ -1,6 +1,7 @@
 import java.awt.Color;
-import java.sql.Date;
 import java.sql.Time;
+import java.text.NumberFormat;
+import javax.swing.text.NumberFormatter;
 
 public class NewClass extends javax.swing.JFrame {
     public boolean finished = false;
@@ -16,6 +17,8 @@ public class NewClass extends javax.swing.JFrame {
     public int cost;
     Color blue = new Color(0,0,153);
     public String result ="";
+    NumberFormat format = NumberFormat.getInstance();
+    NumberFormatter formatter = new NumberFormatter(format);
     /**
      * Creates new form NewClass
      */
@@ -35,10 +38,21 @@ public class NewClass extends javax.swing.JFrame {
         capLabel.setOpaque(true);
         costLabel.setOpaque(true);
         
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(0);
+        formatter.setMaximum(Integer.MAX_VALUE);
+        formatter.setAllowsInvalid(false);
+        formatter.setCommitsOnValidEdit(true);
+        
     }
     
-    public void setFinished(){
-        finished = true;
+    public boolean isFinished(){
+        if(finished){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     
     public String getResult(){
@@ -79,12 +93,12 @@ public class NewClass extends javax.swing.JFrame {
         endLabel = new javax.swing.JLabel();
         capLabel = new javax.swing.JLabel();
         costLabel = new javax.swing.JLabel();
-        startTextField = new javax.swing.JTextField();
-        endTextField = new javax.swing.JTextField();
         capTextField = new javax.swing.JTextField();
         costTextField = new javax.swing.JTextField();
         cancelButton = new javax.swing.JButton();
         createButton = new javax.swing.JButton();
+        startTextField = new javax.swing.JFormattedTextField(formatter);
+        endTextField = new javax.swing.JFormattedTextField(formatter);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,10 +159,6 @@ public class NewClass extends javax.swing.JFrame {
         costLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         costLabel.setText(" Enter Cost:");
 
-        startTextField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
-        endTextField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
         capTextField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         costTextField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -170,6 +180,10 @@ public class NewClass extends javax.swing.JFrame {
                 createButtonActionPerformed(evt);
             }
         });
+
+        startTextField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        endTextField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -206,12 +220,12 @@ public class NewClass extends javax.swing.JFrame {
                     .addComponent(capLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                     .addComponent(costLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                 .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(daysTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(startTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(endTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(capTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(costTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(daysTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(capTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(costTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(startTextField)
+                    .addComponent(endTextField, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(160, Short.MAX_VALUE)
@@ -275,12 +289,13 @@ public class NewClass extends javax.swing.JFrame {
             tID = Integer.parseInt(tIDTextField.getText());
             rID = Integer.parseInt(rIDTextField.getText());
             days = daysTextField.getText();
-            start = Time.valueOf(startTextField.getText());
-            end = Time.valueOf(endTextField.getText());
+            start = Time.valueOf(startTextField.getText()); //need correct time format
+            end = Time.valueOf(endTextField.getText()); //need correct time format
             cap = Integer.parseInt(capTextField.getText());
             cost = Integer.parseInt(costTextField.getText());
             result = DatabaseConnector.createClass(cID,sec, sub, tID, rID, days, start,end,cap,cost);
-            setFinished();
+            finished = true;
+            StaffUI.newClassResults(this);
             dispose();
         }
     }//GEN-LAST:event_createButtonActionPerformed
@@ -301,13 +316,13 @@ public class NewClass extends javax.swing.JFrame {
     private javax.swing.JLabel daysLabel;
     private javax.swing.JTextField daysTextField;
     private javax.swing.JLabel endLabel;
-    private javax.swing.JTextField endTextField;
+    private javax.swing.JFormattedTextField endTextField;
     private javax.swing.JLabel rIDLabel;
     private javax.swing.JTextField rIDTextField;
     private javax.swing.JLabel secLabel;
     private javax.swing.JTextField secTextField;
     private javax.swing.JLabel startLabel;
-    private javax.swing.JTextField startTextField;
+    private javax.swing.JFormattedTextField startTextField;
     private javax.swing.JLabel subLabel;
     private javax.swing.JTextField subTextField;
     private javax.swing.JLabel tIDLabel;
