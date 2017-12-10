@@ -70,7 +70,7 @@ CREATE TABLE enrolled
   cID     INT,
   section INT,
   PRIMARY KEY (sID, cID, section),
-  FOREIGN KEY (sID) REFERENCES student (sID),
+  FOREIGN KEY (sID) REFERENCES student (sID) ON DELETE CASCADE,
   FOREIGN KEY (cID, section) REFERENCES class (cID, section)
 );
 
@@ -384,14 +384,22 @@ CREATE PROCEDURE createClass(IN cID  INT, IN section INT, IN subjct VARCHAR(45),
 DROP PROCEDURE IF EXISTS getStudentsEnrolled//
 CREATE PROCEDURE getStudentsEnrolled(IN cID INT, IN section INT)
   BEGIN
-    SELECT
-      student.name,
-      student.phone
-    FROM student
-    WHERE student.sID IN (SELECT sID
-                          FROM enrolled
-                          WHERE enrolled.cID = cID
-                                AND enrolled.section = section);
+    (SELECT
+       student.name,
+       student.phone
+     FROM student
+     WHERE student.sID IN (SELECT sID
+                           FROM enrolled
+                           WHERE enrolled.cID = cID
+                                 AND enrolled.section = section))
+    UNION
+    (SELECT
+       staff.name,
+       staff.phone
+     FROM staff
+     WHERE staff.tID IN (SELECT tID
+                         FROM class
+                         WHERE class.cID = cID));
   END//
 
 DROP PROCEDURE IF EXISTS getStudentAttendance//
@@ -422,6 +430,16 @@ CREATE PROCEDURE getStaffTypeByID(IN tID INT, OUT type BOOLEAN)
     FROM staff
     WHERE staff.tID = tID;
   END//
+
+DROP PROCEDURE IF EXISTS isFullTimeStudent//
+CREATE PROCEDURE isFullTimeStudent(IN sID INT, OUT fullTime BOOLEAN)
+  BEGIN
+    SELECT COUNT(sID) > 3
+    INTO fullTime
+    FROM enrolled
+    GROUP BY enrolled.sID
+    HAVING enrolled.sID = sID;
+  END //
 
 -- Triggers
 

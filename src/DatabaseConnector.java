@@ -798,4 +798,17 @@ class DatabaseConnector {
             return false;
         }
     }
+
+    static boolean isFullTimeStudent(int sID) {
+        DatabaseConnector dbc = new DatabaseConnector();
+        try (CallableStatement stmnt = dbc.connection.prepareCall("CALL isFullTimeStudent (?, ?)")) {
+            stmnt.setInt(1, sID);
+            stmnt.registerOutParameter(2, Types.BOOLEAN);
+            stmnt.execute();
+            return stmnt.getBoolean(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
